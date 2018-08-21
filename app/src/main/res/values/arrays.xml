@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="challenge_type_label">
+        <item>@string/challenge_none</item>
+        <item>@string/challenge_type</item>
+        <item>@string/challenge_read</item>
+    </array>
+
+    <array name="challenge_type_value">
+        <item>@string/challenge_none</item>
+        <item>@string/challenge_type</item>
+        <item>@string/challenge_read</item>
+    </array>
+
+
+</resources>

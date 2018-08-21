@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.CreateAlarmActivity"
+    tools:showIn="@layout/activity_create_alarm">
+
+    <TimePicker android:id="@+id/tp_time"
+        android:timePickerMode="spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Alarm Name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txt_title" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Repeat"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_sunday"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_sunday" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Sound"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txt_sound" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Vibrate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sw_vibrate" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Challenge"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sp_challenge" />
+
+    <EditText
+        android:id="@+id/txt_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/tp_time" />
+
+    <EditText
+        android:id="@+id/txt_sound"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_monday" />
+
+    <Spinner
+        android:id="@+id/sp_challenge"
+        android:entries="@array/challenge_type_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:spinnerMode="dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txt_title"
+        app:layout_constraintTop_toBottomOf="@+id/txt_title" />
+
+    <Switch
+        android:id="@+id/sw_vibrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Switch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_sound" />
+
+    <ToggleButton
+        android:id="@+id/btn_tuesday"
+        android:layout_width="30sp"
+        android:layout_height="50sp"
+        android:text="ToggleButton"
+        android:textOff="T"
+        android:textOn="T"
+        app:layout_constraintStart_toEndOf="@+id/btn_monday"
+        app:layout_constraintTop_toTopOf="@+id/btn_sunday" />
+
+    <ToggleButton
+        android:id="@+id/btn_wednesday"
+        android:layout_width="30sp"
+        android:layout_height="50sp"
+        android:text="ToggleButton"
+        android:textOff="W"
+        android:textOn="W"
+        app:layout_constraintStart_toEndOf="@+id/btn_tuesday"
+        app:layout_constraintTop_toTopOf="@+id/btn_sunday" />
+
+    <ToggleButton
+        android:id="@+id/btn_saturday"
+        android:layout_width="30sp"
+        android:layout_height="50sp"
+        android:text="ToggleButton"
+        android:textOff="S"
+        android:textOn="S"
+        app:layout_constraintStart_toEndOf="@+id/btn_friday"
+        app:layout_constraintTop_toTopOf="@+id/btn_sunday" />
+
+    <ToggleButton
+        android:id="@+id/btn_friday"
+        android:layout_width="30sp"
+        android:layout_height="50sp"
+        android:text="ToggleButton"
+        android:textOff="F"
+        android:textOn="F"
+        app:layout_constraintStart_toEndOf="@+id/btn_thursday"
+        app:layout_constraintTop_toTopOf="@+id/btn_sunday" />
+
+    <ToggleButton
+        android:id="@+id/btn_thursday"
+        android:layout_width="30sp"
+        android:layout_height="50sp"
+        android:text="ToggleButton"
+        android:textOff="T"
+        android:textOn="T"
+        app:layout_constraintStart_toEndOf="@+id/btn_wednesday"
+        app:layout_constraintTop_toTopOf="@+id/btn_sunday" />
+
+    <ToggleButton
+        android:id="@+id/btn_monday"
+        android:layout_width="30sp"
+        android:layout_height="50sp"
+        android:text="ToggleButton"
+        android:textOff="M"
+        android:textOn="M"
+        app:layout_constraintStart_toEndOf="@+id/btn_sunday"
+        app:layout_constraintTop_toTopOf="@+id/btn_sunday" />
+
+    <ToggleButton
+        android:id="@+id/btn_sunday"
+        android:layout_width="30sp"
+        android:layout_height="50sp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="8dp"
+        android:text="ToggleButton"
+        android:textOff="S"
+        android:textOn="S"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sp_challenge" />
+
+
+</android.support.constraint.ConstraintLayout>
