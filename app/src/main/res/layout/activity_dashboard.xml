@@ -20,6 +20,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <Button
+        android:id="@+id/setAlarm"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/TextView1"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="25dp"
+    android:onClick="onClickSetAlarm"
+    android:text="Set Alarm" />
+
+
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
