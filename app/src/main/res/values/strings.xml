@@ -16,5 +16,9 @@
     <string name="challenge_read">Read</string>
     <string name="add_alarm">Add Alarm</string>
 
+    <string name="default_quote" translatable="false">Believe you can and you\'re halfway there.</string>
+    <string name="default_quote_author" translatable="false">Theodore Roosevelt</string>
+    <string name="default_quote_category" translatable="false">Motivation</string>
+
 
 </resources>

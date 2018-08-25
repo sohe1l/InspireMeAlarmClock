@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.sohe1l.inspiremealarmclock">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <application
         android:allowBackup="true"
@@ -30,20 +32,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.sohe1l.inspiremealarmclock.DashboardActivity" />
         </activity>
-        <activity android:name=".ui.alarm.AlarmActivity"/>
+        <activity android:name=".ui.alarm.AlarmActivity" />
 
-        <receiver android:name=".receiver.AlarmReceiver"
+        <receiver
+            android:name=".receiver.AlarmReceiver"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
-        <receiver android:name=".receiver.BootCompletedReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+        <!---->
+        <!--<receiver android:name=".receiver.BootCompletedReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
-
-
+        <activity android:name=".ui.debug.QuotesActivity"></activity>
     </application>
 
 </manifest>

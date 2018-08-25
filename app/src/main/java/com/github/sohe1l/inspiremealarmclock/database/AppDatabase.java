@@ -11,8 +11,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.github.sohe1l.inspiremealarmclock.model.Alarm;
+import com.github.sohe1l.inspiremealarmclock.model.Quote;
 
-@Database(entities = {Alarm.class}, version = 1, exportSchema = false)
+@Database(entities = {Alarm.class, Quote.class}, version = 1, exportSchema = false)
 @TypeConverters(Converter.class)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -33,6 +34,7 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract AlarmDao alarmDao();
+    public abstract QuoteDao quoteDao();
 
 
 }

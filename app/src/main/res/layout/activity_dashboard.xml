@@ -20,15 +20,56 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <Button
-        android:id="@+id/setAlarm"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/TextView1"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="25dp"
-    android:onClick="onClickSetAlarm"
-    android:text="Set Alarm" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/setAlarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TextView1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:onClick="onClickSetAlarm"
+            android:text="Set Alarm" />
+
+        <Button
+            android:id="@+id/openQuotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TextView1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:onClick="onOpenQuotes"
+            android:text="Qu" />
+
+
+        <Button
+            android:id="@+id/loadQuotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TextView1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:onClick="onLoadQuotes"
+            android:text="LQ" />
+
+        <Button
+            android:id="@+id/openAlarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TextView1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:onClick="onOpenAlarm"
+            android:text="OpA" />
+
+
+
+    </LinearLayout>
+
 
 
 

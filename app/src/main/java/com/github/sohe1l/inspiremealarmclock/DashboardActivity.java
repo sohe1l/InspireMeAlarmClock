@@ -18,11 +18,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;
+import com.github.sohe1l.inspiremealarmclock.model.Quote;
+import com.github.sohe1l.inspiremealarmclock.network.GetQuotesService;
+import com.github.sohe1l.inspiremealarmclock.network.RetrofitClientInstance;
 import com.github.sohe1l.inspiremealarmclock.receiver.AlarmReceiver;
 import com.github.sohe1l.inspiremealarmclock.ui.CreateAlarmActivity;
 import com.github.sohe1l.inspiremealarmclock.ui.alarm.AlarmActivity;
+import com.github.sohe1l.inspiremealarmclock.ui.debug.QuotesActivity;
 
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -58,6 +69,8 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         Context context = getApplicationContext();
+
+
 
 
 
@@ -119,7 +132,101 @@ public class DashboardActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onOpenQuotes(View view) {
+        Intent i = new Intent(this, QuotesActivity.class);
+        startActivity(i);
+    }
 
+
+
+    AppDatabase mDb;
+
+    public void onLoadQuotes(View view) {
+
+        mDb = AppDatabase.getInstance(this);
+
+        int countQuotes = mDb.quoteDao().getNumberOfQuotes();
+
+        Log.d("TAGGGG", String.valueOf(countQuotes));
+        if(countQuotes < 5){
+
+
+//            /*Create handle for the RetrofitInstance interface*/
+//            GetQuotesService service = RetrofitClientInstance.getRetrofitInstance().create(GetQuotesService.class);
+//            Call<List<Quote>> call = service.getQuotes();
+//
+//            Log.wtf("URL Called", call.request().url() + "");
+
+
+//            call.enqueue(new Callback<List<Quote>>() {
+//                @Override
+//                public void onResponse(Call<List<Quote>> call, Response<List<Quote>> response) {
+//
+//                    Log.d("TAGGGG", "Got Response");
+//
+//                    if (response.isSuccessful()) {
+//                        Log.d("TAGGGG", "Got Response --- ok");
+//
+//                        saveToDatabase(response.body());
+//                    } else {
+//
+//                        Log.d("TAGGGG", "Got Response --- error");
+//
+//                        String errorBody = response.errorBody().toString();
+//                        Log.d("TAGGGG", "ERROR " + errorBody);
+//
+//                    }
+//
+//
+//
+//                }
+//
+//                @Override
+//                public void onFailure(Call<List<Quote>> call, Throwable t) {
+//
+//                    Log.d("TAGGGG", "Got Response -- BIG ERROR");
+//
+//                    Toast.makeText(DashboardActivity.this, "Something went wrong...Error message: " + t.getMessage(), Toast.LENGTH_LONG).show();
+//
+//
+//                    if (t instanceof IOException) {
+//                        Log.d("TAGGGG", "Got Response -- NETWORK ERROR");
+//
+//
+//                        // logging probably not necessary
+//                    }
+//                    else {
+//                        Log.d("TAGGGG", "Got Response -- CONVERSION ERROR");
+//
+//                    }
+//
+//                    // error
+//                }
+//            });
+
+
+        }
+
+
+    }
+
+    private void saveToDatabase(List<Quote> quotesList){
+        Log.d("TAGGGG", "Saving Response ... Count: " +  quotesList.size());
+
+
+        for (Quote q: quotesList) {
+            Quote quote = new Quote(q.getQuote(), q.getAuthor(), q.getCategory());
+            mDb.quoteDao().insert(quote);
+        }
+
+        Log.d("TAGGGG", "Done Saving Response!");
+
+    }
+
+    public void onOpenAlarm(View view) {
+        Intent i = new Intent(this, AlarmActivity.class);
+        startActivity(i);
+    }
 
 
 //
@@ -181,7 +288,6 @@ public class DashboardActivity extends AppCompatActivity {
 //
 //
 //
-
 
 
 }
