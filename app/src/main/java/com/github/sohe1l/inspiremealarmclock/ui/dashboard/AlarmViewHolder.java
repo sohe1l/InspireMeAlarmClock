@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.github.sohe1l.inspiremealarmclock.R;
@@ -25,17 +26,12 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnC
     @BindView(R.id.alarm_time)
     TextView alarmTime;
 
-    @BindView(R.id.alarm_sound)
-    TextView alarmSound;
-
-    @BindView(R.id.alarm_vibrate)
-    TextView alarmVibrate;
-
     @BindView(R.id.alarm_repeat)
     TextView alarmRepeat;
 
-    @BindView(R.id.alarm_challenge)
-    TextView alarmChallenge;
+    @BindView(R.id.sw_active)
+    Switch swActive;
+
 
     public AlarmViewHolder(@NonNull View itemView, RecyclerItemClickListener clickListener) {
         super(itemView);
@@ -52,10 +48,8 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     void bind(Alarm alarm) {
         alarmTitle.setText(alarm.getLabel());
-        alarmTime.setText(alarm.getTime());
-        alarmSound.setText(alarm.getSound());
-        alarmVibrate.setText(alarm.isVibrate()?"Vibrate":"Not Vibrate");
-        alarmRepeat.setText(Arrays.toString(alarm.getRepeat()));
-        alarmChallenge.setText(alarm.getChallenge());
+        alarmTime.setText(alarm.getTime12hformat());
+        alarmRepeat.setText( android.text.TextUtils.join(",", alarm.getRepeat()));
+        swActive.setChecked(alarm.isActive());
     }
 }

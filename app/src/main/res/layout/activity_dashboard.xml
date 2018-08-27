@@ -14,64 +14,9 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="?attr/actionBarSize" />
 
     </android.support.design.widget.AppBarLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <Button
-            android:id="@+id/setAlarm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/TextView1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:onClick="onClickSetAlarm"
-            android:text="Set Alarm" />
-
-        <Button
-            android:id="@+id/openQuotes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/TextView1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:onClick="onOpenQuotes"
-            android:text="Qu" />
-
-
-        <Button
-            android:id="@+id/loadQuotes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/TextView1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:onClick="onLoadQuotes"
-            android:text="LQ" />
-
-        <Button
-            android:id="@+id/openAlarm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/TextView1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:onClick="onOpenAlarm"
-            android:text="OpA" />
-
-
-
-    </LinearLayout>
-
-
-
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -89,6 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@drawable/ic_add_alarm_white_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

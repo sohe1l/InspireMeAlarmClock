@@ -37,18 +37,6 @@ import retrofit2.Response;
 
 public class DashboardActivity extends AppCompatActivity {
 
-    // https://developer.android.com/training/scheduling/alarms#java
-    // https://github.com/googlesamples/android-RepeatingAlarm/
-
-    //used for register alarm manager
-    PendingIntent alarmIntent;
-    //used to store running alarmmanager instance
-    AlarmManager alarmManager;
-    //Callback function for Alarmmanager event
-    BroadcastReceiver mReceiver;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,52 +50,10 @@ public class DashboardActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent createAlarmIntent = new Intent(getApplicationContext(), CreateAlarmActivity.class);
                 startActivity(createAlarmIntent);
-//
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
             }
         });
 
         Context context = getApplicationContext();
-
-
-
-
-
-
-
-
-//        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//
-//
-//        Intent receiverIntent = new Intent(context, AlarmReceiver.class);
-//
-//
-//        alarmIntent = PendingIntent.getBroadcast(context, 0, receiverIntent, 0);
-//
-//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-//                SystemClock.elapsedRealtime() + 15000,
-//                15000, alarmIntent);
-
-
-
-//
-//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                SystemClock.elapsedRealtime() +
-//                        10 * 1000, alarmIntent);
-
-
-
-
-        // With setInexactRepeating(), you have to use one of the AlarmManager interval
-        // constants--in this case, AlarmManager.INTERVAL_DAY.
-        //alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000,
-        //AlarmManager.INTERVAL_DAY, alarmIntent);
-
-
-
-
-        //RegisterAlarmBroadcast();
     }
 
     @Override
@@ -132,103 +78,23 @@ public class DashboardActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onOpenQuotes(View view) {
-        Intent i = new Intent(this, QuotesActivity.class);
-        startActivity(i);
-    }
 
 
-
-    AppDatabase mDb;
-
-    public void onLoadQuotes(View view) {
-
-        mDb = AppDatabase.getInstance(this);
-
-        int countQuotes = mDb.quoteDao().getNumberOfQuotes();
-
-        Log.d("TAGGGG", String.valueOf(countQuotes));
-        if(countQuotes < 5){
-
-
-//            /*Create handle for the RetrofitInstance interface*/
-//            GetQuotesService service = RetrofitClientInstance.getRetrofitInstance().create(GetQuotesService.class);
-//            Call<List<Quote>> call = service.getQuotes();
+//    public void onOpenQuotes(View view) {
+//        Intent i = new Intent(this, QuotesActivity.class);
+//        startActivity(i);
+//    }
+////    private void saveToDatabase(List<Quote> quotesList){
+//        for (Quote q: quotesList) {
+//            Quote quote = new Quote(q.getQuote(), q.getAuthor(), q.getCategory());
+//            mDb.quoteDao().insert(quote);
+//        }
+//    }
 //
-//            Log.wtf("URL Called", call.request().url() + "");
-
-
-//            call.enqueue(new Callback<List<Quote>>() {
-//                @Override
-//                public void onResponse(Call<List<Quote>> call, Response<List<Quote>> response) {
-//
-//                    Log.d("TAGGGG", "Got Response");
-//
-//                    if (response.isSuccessful()) {
-//                        Log.d("TAGGGG", "Got Response --- ok");
-//
-//                        saveToDatabase(response.body());
-//                    } else {
-//
-//                        Log.d("TAGGGG", "Got Response --- error");
-//
-//                        String errorBody = response.errorBody().toString();
-//                        Log.d("TAGGGG", "ERROR " + errorBody);
-//
-//                    }
-//
-//
-//
-//                }
-//
-//                @Override
-//                public void onFailure(Call<List<Quote>> call, Throwable t) {
-//
-//                    Log.d("TAGGGG", "Got Response -- BIG ERROR");
-//
-//                    Toast.makeText(DashboardActivity.this, "Something went wrong...Error message: " + t.getMessage(), Toast.LENGTH_LONG).show();
-//
-//
-//                    if (t instanceof IOException) {
-//                        Log.d("TAGGGG", "Got Response -- NETWORK ERROR");
-//
-//
-//                        // logging probably not necessary
-//                    }
-//                    else {
-//                        Log.d("TAGGGG", "Got Response -- CONVERSION ERROR");
-//
-//                    }
-//
-//                    // error
-//                }
-//            });
-
-
-        }
-
-
-    }
-
-    private void saveToDatabase(List<Quote> quotesList){
-        Log.d("TAGGGG", "Saving Response ... Count: " +  quotesList.size());
-
-
-        for (Quote q: quotesList) {
-            Quote quote = new Quote(q.getQuote(), q.getAuthor(), q.getCategory());
-            mDb.quoteDao().insert(quote);
-        }
-
-        Log.d("TAGGGG", "Done Saving Response!");
-
-    }
-
-    public void onOpenAlarm(View view) {
-        Intent i = new Intent(this, AlarmActivity.class);
-        startActivity(i);
-    }
-
-
+//    public void onOpenAlarm(View view) {
+//        Intent i = new Intent(this, AlarmActivity.class);
+//        startActivity(i);
+//    }
 //
 //    public void onClickSetAlarm(View v)
 //    {
@@ -291,32 +157,3 @@ public class DashboardActivity extends AppCompatActivity {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

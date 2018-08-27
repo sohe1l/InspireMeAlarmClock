@@ -1,25 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.CreateAlarmActivity">
+    android:layout_height="wrap_content">
 
-    <android.support.design.widget.AppBarLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:elevation="4dp"
+        style="@style/ToolbarStyle" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_marginTop="?attr/actionBarSize">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TimePicker android:id="@+id/tp_time"
+            android:timePickerMode="spinner"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content"/>
 
-    </android.support.design.widget.AppBarLayout>
+        <EditText
+            android:id="@+id/txt_title"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_margin="8dp"
+            android:hint="Alarm Name"/>
 
-    <include layout="@layout/content_create_alarm" />
 
-</android.support.design.widget.CoordinatorLayout>
+        <Switch
+            android:id="@+id/sw_active"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="0"
+            android:checked="true"
+            android:text="Active" />
+
+        <Switch
+            android:id="@+id/sw_repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="0"
+            android:checked="true"
+            android:text="Repeat"
+            />
+
+        <LinearLayout
+            android:id="@+id/layDays"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="8dp">
+
+            <ToggleButton
+                android:id="@+id/btn_monday"
+                style="@style/dayToggleBtn"
+                android:textOff="MON"
+                android:textOn="MON" />
+
+            <ToggleButton
+                android:id="@+id/btn_tuesday"
+                style="@style/dayToggleBtn"
+                android:textOff="TUE"
+                android:textOn="TUE"/>
+
+            <ToggleButton
+                android:id="@+id/btn_wednesday"
+                style="@style/dayToggleBtn"
+                android:textOff="WED"
+                android:textOn="WED"/>
+
+            <ToggleButton
+                android:id="@+id/btn_thursday"
+                style="@style/dayToggleBtn"
+                android:textOff="THU"
+                android:textOn="THU"/>
+
+            <ToggleButton
+                android:id="@+id/btn_friday"
+                style="@style/dayToggleBtn"
+                android:textOff="FRI"
+                android:textOn="FRI"/>
+
+            <ToggleButton
+                android:id="@+id/btn_saturday"
+                style="@style/dayToggleBtn"
+                android:textOff="SAT"
+                android:textOn="SAT"/>
+
+            <ToggleButton
+                android:id="@+id/btn_sunday"
+                style="@style/dayToggleBtn"
+                android:textOff="SUN"
+                android:textOn="SUN"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center_vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:layout_marginEnd="8dp"
+                android:text="Tone:"
+                android:layout_marginRight="8dp" />
+
+            <TextView
+                android:id="@+id/tv_ringtone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/btn_ringtone"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_weight="0"
+                android:background="@drawable/btn_bg_round"
+                android:onClick="selectRingtone"
+                app:srcCompat="@drawable/ic_music_note_black_24dp" />
+        </LinearLayout>
+
+
+        <Switch
+            android:id="@+id/sw_vibrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:checked="true"
+            android:text="Vibrate" />
+
+
+        <Button
+            android:id="@+id/btn_delete_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="8dp"
+            android:onClick="deleteAlarm"
+            android:padding="8dp"
+            android:text="Delete Alarm" />
+
+    </LinearLayout>
+    </ScrollView>
+</FrameLayout>
+

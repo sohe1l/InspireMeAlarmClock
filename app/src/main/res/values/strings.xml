@@ -19,6 +19,8 @@
     <string name="default_quote" translatable="false">Believe you can and you\'re halfway there.</string>
     <string name="default_quote_author" translatable="false">Theodore Roosevelt</string>
     <string name="default_quote_category" translatable="false">Motivation</string>
+    <string name="alarm_silent">Silent</string>
+    <string name="try_alarm">Try Alarm</string>
 
 
 </resources>

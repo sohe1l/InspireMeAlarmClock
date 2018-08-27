@@ -1,9 +1,12 @@
 package com.github.sohe1l.inspiremealarmclock.database;
 
 import android.arch.persistence.room.TypeConverter;
+import android.net.Uri;
 import android.util.Log;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -12,25 +15,20 @@ import java.util.Map;
 public class Converter {
 
     @TypeConverter
-    public static int[] stringToIntArray(String days){
+    public static ArrayList<Integer> stringToIntegerArrayList(String days){
+        ArrayList<Integer> res = new ArrayList<Integer>();
+        if(days == null || days.equals("")) return res;
+
         String[] daysStringArray = days.split(",");
-
-        int[] res = new int[daysStringArray.length];
-
+        for (String day : daysStringArray) {
+            res.add(Integer.valueOf(day));
+        }
         return res;
-
-//        for(int i = 0; i < daysStringArray.length; i++){
-//
-//            Log.d("Converter", "i " + i  + " " +  daysStringArray[i]);
-//            res[i] = Integer.valueOf(daysStringArray[i]);
-//        }
-//
-//        return res;
     }
 
     @TypeConverter
-    public static String intArrayToString(int[] intArr){
-        return intArr.toString();
+    public static String integerArrayListToString(ArrayList<Integer> ints){
+        return android.text.TextUtils.join(",", ints);
     }
 
     @TypeConverter
@@ -38,7 +36,22 @@ public class Converter {
         return b?1:0;
     }
 
+    @TypeConverter
     public static boolean intToBoolean(int i){
         return i==1;
     }
+
+
+    @TypeConverter
+    public static String uriToString(Uri uri){
+        return uri.toString();
+    }
+
+
+    @TypeConverter
+    public static Uri stringToUri(String uriString){
+        return Uri.parse(uriString);
+    }
+
+
 }

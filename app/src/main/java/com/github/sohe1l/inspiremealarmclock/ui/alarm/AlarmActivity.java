@@ -12,6 +12,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,8 @@ public class AlarmActivity extends AppCompatActivity implements RecognitionListe
 
 
 
+    Alarm alarm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,11 @@ public class AlarmActivity extends AppCompatActivity implements RecognitionListe
         // Keeps the screen on while alarm is ringing...
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+
+        Intent creatingIntent = getIntent();
+        if(creatingIntent.hasExtra(Alarm.INTENT_KEY)){
+            alarm = creatingIntent.getParcelableExtra(Alarm.INTENT_KEY);
+        }
 
 
 //        Intent recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -110,9 +118,9 @@ public class AlarmActivity extends AppCompatActivity implements RecognitionListe
 
         }else{
             quote = mDB.quoteDao().getRandomQuote();
-            lowerCaseQuoteText = quote.getQuote().toLowerCase();
-            Log.v (TAG, "Random quotes: " + quote);
         }
+        lowerCaseQuoteText = quote.getQuote().toLowerCase();
+        Log.v (TAG, "Random quotes: " + quote);
     }
 
     private void loadQuotesFromAPI(){
@@ -387,9 +395,18 @@ public class AlarmActivity extends AppCompatActivity implements RecognitionListe
                 continue; // skip the current iteration
             }
 
+            Log.d(TAG, "lowerCaseQuoteText:" + lowerCaseQuoteText);
+
+
             start = 0;
             index = lowerCaseQuoteText.indexOf(s);
+
+            Log.d(TAG, "index of  :" + s + " is " + index);
+
+
             while(index != -1){
+                Log.d(TAG, "Found :" + s);
+
                 spannable.setSpan(new ForegroundColorSpan(Color.GREEN), index, index+s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 tvQuote.setText(spannable);
                 start = index+s.length() ;
