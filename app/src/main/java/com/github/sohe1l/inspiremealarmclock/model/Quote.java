@@ -8,6 +8,9 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "quote")
 public class Quote {
 
+    @Ignore
+    public static final String JOB_TAG = "QUOTE_JOB_TAG";
+
     @PrimaryKey(autoGenerate = true)
     private int id;
     String quote;

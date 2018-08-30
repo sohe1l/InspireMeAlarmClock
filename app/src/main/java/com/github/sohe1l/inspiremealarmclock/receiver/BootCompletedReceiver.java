@@ -2,8 +2,6 @@ package com.github.sohe1l.inspiremealarmclock.receiver;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.job.JobScheduler;
-import android.app.job.JobService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,8 +24,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 SystemClock.elapsedRealtime() + 15000,
                 15000, alarmIntent);
-
-
 
     }
 }
