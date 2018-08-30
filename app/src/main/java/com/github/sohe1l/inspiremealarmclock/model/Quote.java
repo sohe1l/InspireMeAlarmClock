@@ -4,6 +4,12 @@ import android.annotation.SuppressLint;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
+import android.util.Log;
+
+import com.github.sohe1l.inspiremealarmclock.R;
+import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;
+import com.github.sohe1l.inspiremealarmclock.job.QuotesJobService;
 
 @Entity(tableName = "quote")
 public class Quote {
@@ -73,4 +79,28 @@ public class Quote {
     public String toString() {
         return String.format("Id: %d Quote: %s Author: %s Category: %S", id, quote, author, category);
     }
+
+
+    public static Quote loadRandomQuote(Context context){
+        Quote quote;
+        AppDatabase mDB = AppDatabase.getInstance(context);
+        int count = mDB.quoteDao().getNumberOfQuotes();
+        Log.d("QUOTE COUNT", "" + count);
+        if(count == 0){
+            // the database is empty, load new quotes
+            QuotesJobService.scheduleQuoteJob(context);
+
+            // use the default quote
+            quote = new Quote(
+                    context.getString(R.string.default_quote),
+                    context.getString(R.string.default_quote_author),
+                    context.getString(R.string.default_quote_category));
+        }else{
+            quote = mDB.quoteDao().getRandomQuote();
+            mDB.quoteDao().delete(quote); // delete so next time new quote will appear
+        }
+        return quote;
+    }
+
+
 }

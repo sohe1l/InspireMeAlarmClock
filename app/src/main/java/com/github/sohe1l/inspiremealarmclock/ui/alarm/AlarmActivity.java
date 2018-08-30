@@ -70,7 +70,6 @@ public class AlarmActivity extends AppCompatActivity
 
     private Quote quote;
     private Alarm alarm;
-    private String lowerCaseQuoteText;
     private boolean isChallengeDone = false;
 
     private AdView mAdView;
@@ -118,7 +117,7 @@ public class AlarmActivity extends AppCompatActivity
             startAlarm();
         }
 
-        loadRandomQuote();
+        quote = Quote.loadRandomQuote(this);
 
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -229,33 +228,7 @@ public class AlarmActivity extends AppCompatActivity
         vibrator.cancel();
     }
 
-    private void loadRandomQuote(){
 
-        AppDatabase mDB = AppDatabase.getInstance(this);
-        int count = mDB.quoteDao().getNumberOfQuotes();
-
-        Log.d(TAG,"Count quotes: " + count);
-
-
-        if(count == 0){
-
-            Log.d(TAG,"Trying to schedule job");
-
-
-            // the database is empty, load new quotes
-            QuotesJobService.scheduleQuoteJob(getApplicationContext());
-
-
-            // use the default quote
-            quote = new Quote(getString(R.string.default_quote),
-                              getString(R.string.default_quote_author),
-                              getString(R.string.default_quote_category));
-        }else{
-            quote = mDB.quoteDao().getRandomQuote();
-        }
-        lowerCaseQuoteText = quote.getQuote().toLowerCase();
-    }
-    
     @Override
     protected void onPause() {
         speech.cleanUpSpeech();
