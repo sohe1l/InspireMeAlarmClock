@@ -16,6 +16,8 @@ public class Quote {
 
     @Ignore
     public static final String JOB_TAG = "QUOTE_JOB_TAG";
+    public static final String QUOTE_TEXT_INTENT_KEY = "QUOTE_TEXT_INTENT_KEY";
+
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -81,7 +83,8 @@ public class Quote {
     }
 
 
-    public static Quote loadRandomQuote(Context context){
+
+    public static Quote getRandomQuote(Context context){
         Quote quote;
         AppDatabase mDB = AppDatabase.getInstance(context);
         int count = mDB.quoteDao().getNumberOfQuotes();

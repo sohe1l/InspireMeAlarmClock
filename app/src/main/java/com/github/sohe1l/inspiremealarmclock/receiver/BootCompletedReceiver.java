@@ -7,23 +7,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
+
+import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;
+import com.github.sohe1l.inspiremealarmclock.model.Alarm;
+import com.github.sohe1l.inspiremealarmclock.ui.alarm.AlarmActivity;
+
+import java.util.Calendar;
+import java.util.List;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
+
+    private static final String TAG = AlarmActivity.class.toString();
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        /// temp
 
 
-        Intent receiverIntent = new Intent(context, AlarmReceiver.class);
 
 
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, receiverIntent, 0);
-
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                SystemClock.elapsedRealtime() + 15000,
-                15000, alarmIntent);
 
     }
 }

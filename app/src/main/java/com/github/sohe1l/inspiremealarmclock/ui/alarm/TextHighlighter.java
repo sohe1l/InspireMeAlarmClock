@@ -7,6 +7,9 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.widget.TextView;
+
+import com.github.sohe1l.inspiremealarmclock.R;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,12 +33,15 @@ public class TextHighlighter extends AsyncTask<Void, Spannable, Void> {
 
     private Spannable spannable;
 
-    TextHighlighter(TextView tv, String s, TextHighlighterCallback callback) {
+    private int highlightColor;
+
+    TextHighlighter(TextView tv, String s, int highlightColor, TextHighlighterCallback callback) {
         Log.d(TAG, "Started - q : " + s);
         this.textView = new WeakReference<>(tv);
         spannable = new SpannableString(s);
         textLC = s.toLowerCase();
         this.callback = callback;
+        this.highlightColor = highlightColor;
     }
 
     public void checkWords(String words){
@@ -74,7 +80,7 @@ public class TextHighlighter extends AsyncTask<Void, Spannable, Void> {
                 for(int j = index; j<=index+s.length(); j++){
                     lettersSaid.add(j);
                 }
-                spannable.setSpan(new ForegroundColorSpan(Color.GREEN), index, index+s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.setSpan(new ForegroundColorSpan(highlightColor), index, index+s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 publishProgress(spannable);
                 int start = index+s.length() ;
                 index = textLC.indexOf(s, start);

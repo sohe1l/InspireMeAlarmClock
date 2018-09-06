@@ -16,9 +16,9 @@ public class Converter {
 
     @TypeConverter
     public static ArrayList<Integer> stringToIntegerArrayList(String days){
-        ArrayList<Integer> res = new ArrayList<Integer>();
-        if(days == null || days.equals("")) return res;
+        if(days == null || days.equals("")) return null;
 
+        ArrayList<Integer> res = new ArrayList<Integer>();
         String[] daysStringArray = days.split(",");
         for (String day : daysStringArray) {
             res.add(Integer.valueOf(day));
@@ -28,6 +28,7 @@ public class Converter {
 
     @TypeConverter
     public static String integerArrayListToString(ArrayList<Integer> ints){
+        if(ints == null) return "";
         return android.text.TextUtils.join(",", ints);
     }
 

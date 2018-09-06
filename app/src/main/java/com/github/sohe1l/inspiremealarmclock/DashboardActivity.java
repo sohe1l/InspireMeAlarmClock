@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;
+import com.github.sohe1l.inspiremealarmclock.model.Alarm;
 import com.github.sohe1l.inspiremealarmclock.model.Quote;
 import com.github.sohe1l.inspiremealarmclock.network.GetQuotesService;
 import com.github.sohe1l.inspiremealarmclock.network.RetrofitClientInstance;
@@ -28,6 +29,7 @@ import com.github.sohe1l.inspiremealarmclock.ui.alarm.AlarmActivity;
 import com.github.sohe1l.inspiremealarmclock.ui.debug.QuotesActivity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -36,6 +38,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DashboardActivity extends AppCompatActivity {
+
+    private static final String TAG = AlarmActivity.class.toString();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,77 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         Context context = getApplicationContext();
+
+        testB(this);
+    }
+
+    private void testB(Context context){
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        final int oneDayInMills = 24*60*60*1000;
+        final int oneWeekInMills = 7*oneDayInMills;
+        int mills;
+        Calendar calendar = Calendar.getInstance();
+        final int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = calendar.get(Calendar.MINUTE);
+        Log.d("testB", "Current h:m is " + currentHour + ":" + currentMinute);
+
+        Log.d("testB", "Getting alarms from database....");
+        AppDatabase mDb = AppDatabase.getInstance(context);
+        List<Alarm> activeAlarms = mDb.alarmDao().getActiveAlarmsAsList();
+
+        Log.d("testB", "Alarm count: " + activeAlarms.size());
+
+        int currentMills = getCurrentMilliseconds();
+
+        for (Alarm alarm : activeAlarms){
+
+            Intent intent = new Intent(context, AlarmActivity.class);
+            intent.putExtra(Alarm.INTENT_KEY, alarm);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+            ArrayList<Integer> repeat = alarm.getRepeat();
+
+            if(repeat == null){
+
+                Log.d("testB", "Non-repeating alarm: " + alarm.getHour() + ":" + alarm.getMinute());
+
+                mills = alarm.getNextMillsForNonRepeating();
+
+
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() + mills, pendingIntent);
+            }else{
+                for (int repeatDay: repeat) {
+
+                    mills = alarm.getMillsForRepeating(repeatDay);
+
+                    alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                            SystemClock.elapsedRealtime() + mills, oneWeekInMills, pendingIntent);
+                }
+            }
+        }
+
+    }
+
+    private int getCurrentMilliseconds(){
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+
+
+        Log.d("DAYOFWEKK", String.valueOf(calendar.get(Calendar.DAY_OF_WEEK)) );
+
+        if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY){
+
+            Log.d("DAYOFWEKK", "ITS WEDNESDAY" );
+
+        }
+
+        return hour*60*60*1000 + minute*60*1000;
     }
 
     @Override

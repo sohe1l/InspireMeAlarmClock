@@ -11,6 +11,7 @@ import com.github.sohe1l.inspiremealarmclock.database.Converter;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 @Entity(tableName = "alarm")
 public class Alarm implements Parcelable{
@@ -23,7 +24,7 @@ public class Alarm implements Parcelable{
     int minute;
     Uri ringtone;
     boolean vibrate;
-    ArrayList<Integer> repeat;  // from 1 (Monday) to 7 (Sunday).
+    ArrayList<Integer> repeat;  // based on Calendar.MONDAY, ...
     String challenge;
 
     @Ignore
@@ -183,5 +184,70 @@ public class Alarm implements Parcelable{
         dest.writeByte((byte) (vibrate ? 1 : 0));
         dest.writeString(Converter.integerArrayListToString(repeat));
         dest.writeString(challenge);
+    }
+
+
+    public int getAsMilliseconds(){
+        return hour*60*60*1000 + minute*60*1000;
+    }
+
+    public int getNextMillsForNonRepeating(){
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int currentMills = hour*60*60*1000 + minute*60*1000;
+
+        int mills = getAsMilliseconds() - currentMills;
+
+        if(getAsMilliseconds() < currentMills){
+            mills = 24*60*60*1000 + mills;
+        }
+
+        return mills;
+    }
+
+    public int getMillsForRepeating(int repeatDay){
+
+        final int oneDayInMills = 24*60*60*1000;
+        final int oneWeekInMills = 7*oneDayInMills;
+
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int currentMills = hour*60*60*1000 + minute*60*1000;
+        final int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+        int mills;
+
+        if(currentDay == repeatDay ){
+            mills = getNextMillsForNonRepeating();
+
+            if(getAsMilliseconds() < currentMills){
+                mills -= oneDayInMills;
+                mills += 6 * oneDayInMills;
+            }
+
+
+        }else if(repeatDay > currentDay){
+            mills = (repeatDay-currentDay)*oneDayInMills
+                    +  getNextMillsForNonRepeating();
+
+            // remove one day if alarm is before current time
+            if(getAsMilliseconds() < currentMills){
+                mills -= oneDayInMills;
+            }
+
+        }else{ // repeatDay < currentDay
+
+            mills = (7+repeatDay-currentDay)*oneDayInMills
+                    +  getNextMillsForNonRepeating();
+
+            // remove one day if alarm is before current time
+            if(getAsMilliseconds() < currentMills){
+                mills -= oneDayInMills;
+            }
+
+        }
+
+        return mills;
     }
 }

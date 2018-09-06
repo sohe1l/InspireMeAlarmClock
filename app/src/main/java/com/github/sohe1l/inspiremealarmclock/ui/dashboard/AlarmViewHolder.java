@@ -49,7 +49,10 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnC
     void bind(Alarm alarm) {
         alarmTitle.setText(alarm.getLabel());
         alarmTime.setText(alarm.getTime12hformat());
-        alarmRepeat.setText( android.text.TextUtils.join(",", alarm.getRepeat()));
         swActive.setChecked(alarm.isActive());
+
+        if(alarm.getRepeat() != null) {
+            alarmRepeat.setText( android.text.TextUtils.join(",", alarm.getRepeat()));
+        }
     }
 }

@@ -16,6 +16,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.speech.SpeechRecognizer;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -117,7 +118,7 @@ public class AlarmActivity extends AppCompatActivity
             startAlarm();
         }
 
-        quote = Quote.loadRandomQuote(this);
+        quote = Quote.getRandomQuote(this);
 
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -128,7 +129,7 @@ public class AlarmActivity extends AppCompatActivity
         tvQuote.setText(quote.getQuote());
 
 
-        textHighlighter = new TextHighlighter(tvQuote, quote.getQuote(), this);
+        textHighlighter = new TextHighlighter(tvQuote, quote.getQuote(), getResources().getColor(R.color.highlightedQuote), this);
         textHighlighter.execute();
 
         speech = new Speech(this, this);
@@ -140,6 +141,8 @@ public class AlarmActivity extends AppCompatActivity
         btnSpeak.clearAnimation();
         btnSpeak.setVisibility(View.GONE);
         btnShare.setVisibility(View.VISIBLE);
+
+        tvQuote.setTextColor(getResources().getColor(R.color.highlightedQuote));
 
         // Log event
         Bundle bundle = new Bundle();
@@ -225,7 +228,10 @@ public class AlarmActivity extends AppCompatActivity
 
     private void stopAlarm(){
         ringtone.stop();
-        vibrator.cancel();
+
+        if(vibrator != null){
+            vibrator.cancel();
+        }
     }
 
 
@@ -254,6 +260,12 @@ public class AlarmActivity extends AppCompatActivity
     }
 
     public void shareQuote(View view) {
+        ShareCompat.IntentBuilder
+                .from(this)
+                .setType("text/plain")
+                .setChooserTitle(getString(R.string.share_title))
+                .setText(getString(R.string.share_text, quote.getQuote()))
+                .startChooser();
     }
 
     @Override

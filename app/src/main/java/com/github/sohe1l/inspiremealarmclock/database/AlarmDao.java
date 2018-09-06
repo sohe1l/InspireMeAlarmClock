@@ -22,6 +22,10 @@ public interface AlarmDao {
     @Query("SELECT * FROM alarm")
     List<Alarm> getAllAsList();
 
+
+    @Query("SELECT * FROM alarm WHERE active = 1")
+    List<Alarm> getActiveAlarmsAsList();
+
     @Insert
     void insert(Alarm alarm);
 
@@ -32,7 +36,7 @@ public interface AlarmDao {
     void delete(Alarm alarm);
 
     @Query("SELECT * FROM alarm where id = :id")
-    LiveData<Alarm> getMovie(int id);
+    LiveData<Alarm> getAlarm(int id);
 
 
 

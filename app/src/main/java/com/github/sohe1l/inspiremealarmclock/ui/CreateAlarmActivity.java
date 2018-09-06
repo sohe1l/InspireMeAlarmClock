@@ -37,6 +37,7 @@ import com.github.sohe1l.inspiremealarmclock.model.Alarm;
 import com.github.sohe1l.inspiremealarmclock.ui.alarm.AlarmActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -85,14 +86,8 @@ public class CreateAlarmActivity extends AppCompatActivity {
     @BindView(R.id.tv_ringtone)
     TextView tvRingtone;
 
-    @BindView(R.id.btn_ringtone)
-    ImageButton btnRingtone;
-
     @BindView(R.id.sw_vibrate)
     Switch swVibrate;
-
-    @BindView(R.id.sw_active)
-    Switch swActive;
 
     Uri ringtoneUri;
     Ringtone ringtone;
@@ -102,8 +97,8 @@ public class CreateAlarmActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.btn_delete_alarm)
-    Button btnDeleteAlarm;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,39 +125,43 @@ public class CreateAlarmActivity extends AppCompatActivity {
         });
 
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(alarm == null)
+                    saveAlarm();
+                else
+                    updateAlarm();
+            }
+        });
+
         Intent creatingIntent = getIntent();
         if(creatingIntent.hasExtra(Alarm.INTENT_KEY)){ // editing alarm
             alarm = creatingIntent.getParcelableExtra(Alarm.INTENT_KEY);
             populateForm();
-        }else{ // creating alarm
-            swActive.setVisibility(View.GONE);
-            btnDeleteAlarm.setVisibility(View.GONE);
-
         }
 
         mDb = AppDatabase.getInstance(getApplicationContext());
     }
 
     private void populateForm(){
-        btnDeleteAlarm.setVisibility(View.VISIBLE);
-        swActive.setChecked(alarm.isActive());
         swVibrate.setChecked(alarm.isVibrate());
         tvTitle.setText(alarm.getLabel());
         timePicker.setCurrentHour(alarm.getHour());
         timePicker.setCurrentMinute(alarm.getMinute());
 
         ArrayList<Integer> repeat = alarm.getRepeat();
-        if(repeat.size() == 0){
+        if(repeat == null){
             swRepeat.setChecked(false);
         }else{
             swRepeat.setChecked(true);
-            if(repeat.contains(1)) btnMonday.setChecked(true);
-            if(repeat.contains(2)) btnTuesday.setChecked(true);
-            if(repeat.contains(3)) btnWednesday.setChecked(true);
-            if(repeat.contains(4)) btnThursday.setChecked(true);
-            if(repeat.contains(5)) btnFriday.setChecked(true);
-            if(repeat.contains(6)) btnSaturday.setChecked(true);
-            if(repeat.contains(7)) btnSunday.setChecked(true);
+            if(repeat.contains(Calendar.MONDAY)) btnMonday.setChecked(true);
+            if(repeat.contains(Calendar.TUESDAY)) btnTuesday.setChecked(true);
+            if(repeat.contains(Calendar.WEDNESDAY)) btnWednesday.setChecked(true);
+            if(repeat.contains(Calendar.THURSDAY)) btnThursday.setChecked(true);
+            if(repeat.contains(Calendar.FRIDAY)) btnFriday.setChecked(true);
+            if(repeat.contains(Calendar.SATURDAY)) btnSaturday.setChecked(true);
+            if(repeat.contains(Calendar.SUNDAY)) btnSunday.setChecked(true);
         }
 
         selectRingtone(alarm.getRingtone());
@@ -180,15 +179,13 @@ public class CreateAlarmActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if(id == R.id.action_add_alarm) {
-            if(alarm == null)
-                saveAlarm();
-            else
-                updateAlarm();
-        }else if(id == R.id.action_try_alarm){
+        if(id == R.id.action_try_alarm){
             Intent alarmIntent = new Intent(this, AlarmActivity.class);
             alarmIntent.putExtra(Alarm.INTENT_KEY, alarm);
             startActivity(alarmIntent);
+        }else if(id == R.id.action_delete_alarm){
+            mDb.alarmDao().delete(alarm);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -196,8 +193,11 @@ public class CreateAlarmActivity extends AppCompatActivity {
 
 
     private void saveAlarm(){
+
+        Log.d("SAVING_REPEAT", (getRepeat() == null)?"Y":"N" );
+
         Alarm alarm = new Alarm(
-                true, // always start as active swActive.isChecked()
+                true, // always start as active
                 tvTitle.getText().toString(),
                 timePicker.getCurrentHour(),
                 timePicker.getCurrentMinute(),
@@ -210,7 +210,6 @@ public class CreateAlarmActivity extends AppCompatActivity {
     }
 
     private void updateAlarm(){
-        alarm.setActive(swActive.isChecked());
         alarm.setLabel(tvTitle.getText().toString());
         alarm.setHour(timePicker.getCurrentHour());
         alarm.setMinute(timePicker.getCurrentMinute());
@@ -222,28 +221,30 @@ public class CreateAlarmActivity extends AppCompatActivity {
     }
 
     private ArrayList<Integer> getRepeat(){
+        if(!swRepeat.isChecked()) return null;
+
         ArrayList<Integer> repeatList = new ArrayList<Integer>();
 
         if(btnMonday.isChecked()){
-            repeatList.add(1);
+            repeatList.add(Calendar.MONDAY);
         }
         if(btnTuesday.isChecked()){
-            repeatList.add(2);
+            repeatList.add(Calendar.TUESDAY);
         }
         if(btnWednesday.isChecked()){
-            repeatList.add(3);
+            repeatList.add(Calendar.WEDNESDAY);
         }
         if(btnThursday.isChecked()){
-            repeatList.add(4);
+            repeatList.add(Calendar.THURSDAY);
         }
         if(btnFriday.isChecked()){
-            repeatList.add(5);
+            repeatList.add(Calendar.FRIDAY);
         }
         if(btnSaturday.isChecked()){
-            repeatList.add(6);
+            repeatList.add(Calendar.SATURDAY);
         }
         if(btnSunday.isChecked()){
-            repeatList.add(7);
+            repeatList.add(Calendar.SUNDAY);
         }
 
         return repeatList;
@@ -283,8 +284,5 @@ public class CreateAlarmActivity extends AppCompatActivity {
         }
     }
 
-    public void deleteAlarm(View view) {
-        mDb.alarmDao().delete(alarm);
-        finish();
-    }
+
 }
