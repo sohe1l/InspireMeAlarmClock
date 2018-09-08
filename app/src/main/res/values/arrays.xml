@@ -14,4 +14,16 @@
     </array>
 
 
+    <array name="day_short">
+        <item></item>
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </array>
+
+
 </resources>

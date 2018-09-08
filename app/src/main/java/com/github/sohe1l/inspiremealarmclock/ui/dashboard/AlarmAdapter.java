@@ -9,16 +9,21 @@ import android.view.ViewGroup;
 import com.github.sohe1l.inspiremealarmclock.R;
 import com.github.sohe1l.inspiremealarmclock.model.Alarm;
 import com.github.sohe1l.inspiremealarmclock.ui.RecyclerItemClickListener;
+import com.github.sohe1l.inspiremealarmclock.ui.SwitchClickListener;
+
 import java.util.List;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmViewHolder>  {
 
     final private List<Alarm> alarms;
-    final private RecyclerItemClickListener clickListener;
+    final private RecyclerItemClickListener recyclerClickListener;
+    final private SwitchClickListener switchClickListener;
 
-    public AlarmAdapter(List<Alarm> alarms, RecyclerItemClickListener listener) {
+
+    public AlarmAdapter(List<Alarm> alarms, RecyclerItemClickListener listener, SwitchClickListener switchListener ) {
         this.alarms = alarms;
-        clickListener = listener;
+        recyclerClickListener = listener;
+        switchClickListener = switchListener;
     }
 
     @NonNull
@@ -27,7 +32,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmViewHolder>  {
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.dashboard_alarm_item, viewGroup, false);
-        return new AlarmViewHolder(view, clickListener);
+        return new AlarmViewHolder(view, recyclerClickListener, switchClickListener);
     }
 
     @Override

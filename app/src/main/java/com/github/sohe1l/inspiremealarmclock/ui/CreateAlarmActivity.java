@@ -155,13 +155,14 @@ public class CreateAlarmActivity extends AppCompatActivity {
             swRepeat.setChecked(false);
         }else{
             swRepeat.setChecked(true);
-            if(repeat.contains(Calendar.MONDAY)) btnMonday.setChecked(true);
-            if(repeat.contains(Calendar.TUESDAY)) btnTuesday.setChecked(true);
-            if(repeat.contains(Calendar.WEDNESDAY)) btnWednesday.setChecked(true);
-            if(repeat.contains(Calendar.THURSDAY)) btnThursday.setChecked(true);
-            if(repeat.contains(Calendar.FRIDAY)) btnFriday.setChecked(true);
-            if(repeat.contains(Calendar.SATURDAY)) btnSaturday.setChecked(true);
-            if(repeat.contains(Calendar.SUNDAY)) btnSunday.setChecked(true);
+            // initial all are checked so we reverse the logic
+            if(!repeat.contains(Calendar.MONDAY)) btnMonday.setChecked(false);
+            if(!repeat.contains(Calendar.TUESDAY)) btnTuesday.setChecked(false);
+            if(!repeat.contains(Calendar.WEDNESDAY)) btnWednesday.setChecked(false);
+            if(!repeat.contains(Calendar.THURSDAY)) btnThursday.setChecked(false);
+            if(!repeat.contains(Calendar.FRIDAY)) btnFriday.setChecked(false);
+            if(!repeat.contains(Calendar.SATURDAY)) btnSaturday.setChecked(false);
+            if(!repeat.contains(Calendar.SUNDAY)) btnSunday.setChecked(false);
         }
 
         selectRingtone(alarm.getRingtone());
@@ -193,9 +194,6 @@ public class CreateAlarmActivity extends AppCompatActivity {
 
 
     private void saveAlarm(){
-
-        Log.d("SAVING_REPEAT", (getRepeat() == null)?"Y":"N" );
-
         Alarm alarm = new Alarm(
                 true, // always start as active
                 tvTitle.getText().toString(),
@@ -204,7 +202,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
                 ringtoneUri,
                 swVibrate.isChecked(),
                 getRepeat(),
-                "");
+                false);
         mDb.alarmDao().insert(alarm);
         finish();
     }
@@ -216,6 +214,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
         alarm.setRingtone(ringtoneUri);
         alarm.setVibrate(swVibrate.isChecked());
         alarm.setRepeat(getRepeat());
+        alarm.setChallengeDone(false);
         mDb.alarmDao().update(alarm);
         finish();
     }

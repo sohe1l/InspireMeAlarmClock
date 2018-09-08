@@ -1,17 +1,26 @@
 package com.github.sohe1l.inspiremealarmclock.model;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemClock;
+import android.util.Log;
 
+import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;
 import com.github.sohe1l.inspiremealarmclock.database.Converter;
+import com.github.sohe1l.inspiremealarmclock.receiver.AlarmReceiver;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 @Entity(tableName = "alarm")
 public class Alarm implements Parcelable{
@@ -25,12 +34,13 @@ public class Alarm implements Parcelable{
     Uri ringtone;
     boolean vibrate;
     ArrayList<Integer> repeat;  // based on Calendar.MONDAY, ...
-    String challenge;
+    boolean challengeDone; // if its true means the user has solved the challenge and alarm is off
+
 
     @Ignore
     public static final String INTENT_KEY = "ALARM_INTENT_KEY";
 
-    public Alarm(int id, boolean active, String label, int hour, int minute, Uri ringtone, boolean vibrate, ArrayList<Integer> repeat, String challenge) {
+    public Alarm(int id, boolean active, String label, int hour, int minute, Uri ringtone, boolean vibrate, ArrayList<Integer> repeat, boolean challengeDone) {
         this.id = id;
         this.active = active;
         this.label = label;
@@ -39,11 +49,11 @@ public class Alarm implements Parcelable{
         this.ringtone = ringtone;
         this.vibrate = vibrate;
         this.repeat = repeat;
-        this.challenge = challenge;
+        this.challengeDone = challengeDone;
     }
 
     @Ignore
-    public Alarm(boolean active, String label, int hour, int minute, Uri ringtone, boolean vibrate, ArrayList<Integer> repeat, String challenge) {
+    public Alarm(boolean active, String label, int hour, int minute, Uri ringtone, boolean vibrate, ArrayList<Integer> repeat, boolean challengeDone) {
         this.active = active;
         this.label = label;
         this.hour = hour;
@@ -51,7 +61,7 @@ public class Alarm implements Parcelable{
         this.ringtone = ringtone;
         this.vibrate = vibrate;
         this.repeat = repeat;
-        this.challenge = challenge;
+        this.challengeDone = challengeDone;
     }
 
 
@@ -120,13 +130,14 @@ public class Alarm implements Parcelable{
         this.repeat = repeat;
     }
 
-    public String getChallenge() {
-        return challenge;
+    public boolean isChallengeDone() {
+        return challengeDone;
     }
 
-    public void setChallenge(String challenge) {
-        this.challenge = challenge;
+    public void setChallengeDone(boolean challengeDone) {
+        this.challengeDone = challengeDone;
     }
+
 
     public String getTime12hformat(){
         if(hour == 0)
@@ -153,7 +164,7 @@ public class Alarm implements Parcelable{
         ringtone = in.readParcelable(Uri.class.getClassLoader());
         vibrate = in.readByte() != 0;
         repeat = Converter.stringToIntegerArrayList(in.readString());
-        challenge = in.readString();
+        challengeDone = in.readByte() != 0;
     }
 
     public static final Creator<Alarm> CREATOR = new Creator<Alarm>() {
@@ -183,12 +194,50 @@ public class Alarm implements Parcelable{
         dest.writeParcelable(ringtone, flags);
         dest.writeByte((byte) (vibrate ? 1 : 0));
         dest.writeString(Converter.integerArrayListToString(repeat));
-        dest.writeString(challenge);
+        dest.writeByte((byte) (challengeDone ? 1 : 0));
     }
 
 
     public int getAsMilliseconds(){
         return hour*60*60*1000 + minute*60*1000;
+    }
+
+    public int getNextOccurrence(){
+
+        Calendar calendar = Calendar.getInstance();
+        final int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+        final int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        final int minute = calendar.get(Calendar.MINUTE);
+        final int currentMills = hour*60*60*1000 + minute*60*1000;
+        int mills = 0;
+
+        if(repeat == null){
+
+            mills = getAsMilliseconds() - currentMills;
+
+            if(getAsMilliseconds() < currentMills){
+                mills = 24*60*60*1000 + mills;
+            }
+
+        }else{
+            // here we want to find the next day of repeat closest to the current day
+            // repeat must contain at least one day between 1 to 7 so
+            // we are going to check every day starting from current day with a for loop
+            int currentLoopDay = currentDay;
+            for(int i = 0; i<7; i++){
+                if(repeat.contains(currentLoopDay)){
+
+                    // if alarm is same day && not already passed the alarm time must skip day
+                    if(currentLoopDay != currentDay ||  getAsMilliseconds() > currentMills){
+                        mills = getMillsForRepeating(currentLoopDay);
+                        break;
+                    }
+                }
+                if(currentLoopDay == 7) currentLoopDay = 0;
+                currentLoopDay++;
+            }
+        }
+        return mills;
     }
 
     public int getNextMillsForNonRepeating(){
@@ -209,8 +258,6 @@ public class Alarm implements Parcelable{
     public int getMillsForRepeating(int repeatDay){
 
         final int oneDayInMills = 24*60*60*1000;
-        final int oneWeekInMills = 7*oneDayInMills;
-
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
@@ -235,7 +282,6 @@ public class Alarm implements Parcelable{
             if(getAsMilliseconds() < currentMills){
                 mills -= oneDayInMills;
             }
-
         }else{ // repeatDay < currentDay
 
             mills = (7+repeatDay-currentDay)*oneDayInMills
@@ -245,9 +291,40 @@ public class Alarm implements Parcelable{
             if(getAsMilliseconds() < currentMills){
                 mills -= oneDayInMills;
             }
-
         }
-
         return mills;
     }
+
+    public void scheduleAlarmNextOccurrence(Context context){
+        scheduleAlarm(getNextOccurrence(), context);
+    }
+
+
+    public void scheduleAlarm(int afterMills, Context context){
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent alarmReceiverIntent = new Intent(context, AlarmReceiver.class);
+        alarmReceiverIntent.putExtra(Alarm.INTENT_KEY, this);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, getId(), alarmReceiverIntent, 0);
+
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + afterMills,
+                pendingIntent);
+    }
+
+
+    public static void setALlAlarms(Context context){
+        AppDatabase mDb = AppDatabase.getInstance(context);
+        List<Alarm> activeAlarms = mDb.alarmDao().getActiveAlarmsAsList();
+        for (Alarm alarm : activeAlarms) {
+            alarm.scheduleAlarmNextOccurrence(context);
+            // set challenge done to false to make sure user has to do the challenge
+            alarm.setChallengeDone(false);
+            mDb.alarmDao().update(alarm);
+        }
+
+    }
+
+
+
 }

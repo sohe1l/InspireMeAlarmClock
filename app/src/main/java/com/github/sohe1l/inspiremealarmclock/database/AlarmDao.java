@@ -36,8 +36,6 @@ public interface AlarmDao {
     void delete(Alarm alarm);
 
     @Query("SELECT * FROM alarm where id = :id")
-    LiveData<Alarm> getAlarm(int id);
-
-
+    Alarm getAlarm(int id);
 
 }

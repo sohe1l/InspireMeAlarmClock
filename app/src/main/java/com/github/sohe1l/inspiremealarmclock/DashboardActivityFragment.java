@@ -21,6 +21,7 @@ import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;
 import com.github.sohe1l.inspiremealarmclock.model.Alarm;
 import com.github.sohe1l.inspiremealarmclock.ui.CreateAlarmActivity;
 import com.github.sohe1l.inspiremealarmclock.ui.RecyclerItemClickListener;
+import com.github.sohe1l.inspiremealarmclock.ui.SwitchClickListener;
 import com.github.sohe1l.inspiremealarmclock.ui.dashboard.AlarmAdapter;
 
 import java.util.List;
@@ -31,7 +32,8 @@ import butterknife.ButterKnife;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DashboardActivityFragment extends Fragment implements RecyclerItemClickListener {
+public class DashboardActivityFragment extends Fragment
+        implements RecyclerItemClickListener, SwitchClickListener {
 
     private static final String TAG = DashboardActivityFragment.class.getSimpleName();
 
@@ -84,7 +86,7 @@ public class DashboardActivityFragment extends Fragment implements RecyclerItemC
 
     private void loadAlarms(){
         if(alarms == null) return;
-        AlarmAdapter alarmAdapter = new AlarmAdapter(alarms, this);
+        AlarmAdapter alarmAdapter = new AlarmAdapter(alarms, this, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvAlarms.setLayoutManager(layoutManager);
         rvAlarms.setHasFixedSize(true);
@@ -98,5 +100,17 @@ public class DashboardActivityFragment extends Fragment implements RecyclerItemC
         editAlarmIntent.putExtra(Alarm.INTENT_KEY, alarms.get(index));
         startActivity(editAlarmIntent);
 
+    }
+
+    @Override
+    public void onSwitchClicked(int id, boolean isOn) {
+
+        AppDatabase mDb = AppDatabase.getInstance(getContext());
+        Alarm alarm = mDb.alarmDao().getAlarm(id);
+        alarm.setActive(isOn);
+        mDb.alarmDao().update(alarm);
+
+        // set up the alarms again
+        Alarm.setALlAlarms(getContext());
     }
 }

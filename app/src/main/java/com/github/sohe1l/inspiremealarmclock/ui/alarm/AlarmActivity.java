@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.AsyncTask;
@@ -137,6 +138,12 @@ public class AlarmActivity extends AppCompatActivity
 
     private void challengeDone(){
         isChallengeDone = true;
+
+        // update the challenge done on db
+        AppDatabase mDb = AppDatabase.getInstance(getApplicationContext());
+        alarm.setChallengeDone(true);
+        mDb.alarmDao().update(alarm);
+
         stopAlarm();
         btnSpeak.clearAnimation();
         btnSpeak.setVisibility(View.GONE);
@@ -203,14 +210,26 @@ public class AlarmActivity extends AppCompatActivity
 
 
     private void startAlarm(){
+
+        Log.wtf(TAG, "START ALARM");
+
+
         if(isChallengeDone) return;
+
+        Log.wtf(TAG, "START ALARM AFTER CHALLENGE DONE");
 
         Log.d(TAG, "starting");
 
         btnSpeak.clearAnimation();
         btnSpeak.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_bg_round));
 
+
+        Log.wtf(TAG, "RING " + alarm.getRingtone().toString());
+
+
+
         ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarm.getRingtone());
+        ringtone.setStreamType(AudioManager.STREAM_ALARM);
         ringtone.play();
 
         if(alarm.isVibrate()){
@@ -227,7 +246,9 @@ public class AlarmActivity extends AppCompatActivity
     }
 
     private void stopAlarm(){
-        ringtone.stop();
+        if(ringtone != null){
+            ringtone.stop();
+        }
 
         if(vibrator != null){
             vibrator.cancel();
