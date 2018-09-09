@@ -1,13 +1,9 @@
 package com.github.sohe1l.inspiremealarmclock.ui.alarm;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -21,49 +17,27 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.util.Range;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.firebase.jobdispatcher.Constraint;
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Job;
-import com.github.sohe1l.inspiremealarmclock.DashboardActivity;
 import com.github.sohe1l.inspiremealarmclock.R;
 import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;
-import com.github.sohe1l.inspiremealarmclock.job.QuotesJobService;
 import com.github.sohe1l.inspiremealarmclock.model.Alarm;
 import com.github.sohe1l.inspiremealarmclock.model.Quote;
-import com.github.sohe1l.inspiremealarmclock.network.GetQuotesService;
-import com.github.sohe1l.inspiremealarmclock.network.RetrofitClientInstance;
 import com.github.sohe1l.inspiremealarmclock.utilities.Speech;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AlarmActivity extends AppCompatActivity
         implements Speech.SpeechCallback, TextHighlighter.TextHighlighterCallback {
@@ -82,10 +56,12 @@ public class AlarmActivity extends AppCompatActivity
     private final String ANALYTICS_NUM_TRY_KEY = "NUM_TRIES";
     private int tryCounter = 0;
 
+    private boolean isTesting = false;
 
 
     private Speech speech;
-    @BindView(R.id.tvQuote) TextView tvQuote;
+    @BindView(R.id.tvQuote)
+    TextView tvQuote;
 
     @BindView(R.id.btn_speak)
     ImageButton btnSpeak;
@@ -95,13 +71,15 @@ public class AlarmActivity extends AppCompatActivity
 
     private Ringtone ringtone;
     private Vibrator vibrator;
-    Animation speakBtnAnim;
-    TextHighlighter textHighlighter;
+    private Animation speakBtnAnim;
+    private TextHighlighter textHighlighter;
+    private AsyncTask asyncTaskHighlighter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
+
         ButterKnife.bind(this);
 
         // Keeps the screen on while alarm is ringing...
@@ -112,11 +90,14 @@ public class AlarmActivity extends AppCompatActivity
         BounceInterpolator interpolator = new BounceInterpolator(0.2, 20);
         speakBtnAnim.setInterpolator(interpolator);
 
-
         Intent creatingIntent = getIntent();
         if(creatingIntent.hasExtra(Alarm.INTENT_KEY)){
             alarm = creatingIntent.getParcelableExtra(Alarm.INTENT_KEY);
             startAlarm();
+        }
+
+        if(creatingIntent.hasExtra(Alarm.INTENT_KEY_TESTING)){
+            isTesting = creatingIntent.getBooleanExtra(Alarm.INTENT_KEY_TESTING, false);
         }
 
         quote = Quote.getRandomQuote(this);
@@ -129,9 +110,11 @@ public class AlarmActivity extends AppCompatActivity
 
         tvQuote.setText(quote.getQuote());
 
+        Log.wtf("WORDS", "@@@@@@@@@@@@@@@@@@@@@@ CREATING NEW HIGHLIGHTER");
+
 
         textHighlighter = new TextHighlighter(tvQuote, quote.getQuote(), getResources().getColor(R.color.highlightedQuote), this);
-        textHighlighter.execute();
+        asyncTaskHighlighter = textHighlighter.execute();
 
         speech = new Speech(this, this);
     }
@@ -139,10 +122,15 @@ public class AlarmActivity extends AppCompatActivity
     private void challengeDone(){
         isChallengeDone = true;
 
-        // update the challenge done on db
-        AppDatabase mDb = AppDatabase.getInstance(getApplicationContext());
-        alarm.setChallengeDone(true);
-        mDb.alarmDao().update(alarm);
+        if(!isTesting){
+            // update the challenge done on db
+            AppDatabase mDb = AppDatabase.getInstance(getApplicationContext());
+            alarm.setChallengeDone(true);
+            mDb.alarmDao().update(alarm);
+
+            //delete the quote
+            mDb.quoteDao().delete(quote); // delete so next time new quote will appear
+        }
 
         stopAlarm();
         btnSpeak.clearAnimation();
@@ -158,7 +146,7 @@ public class AlarmActivity extends AppCompatActivity
     }
 
 
-    public void check_permission(){
+    private void check_permission(){
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO)
@@ -199,7 +187,6 @@ public class AlarmActivity extends AppCompatActivity
 
         check_permission();
 
-
         tryCounter++;
 
         btnSpeak.startAnimation(speakBtnAnim);
@@ -211,23 +198,9 @@ public class AlarmActivity extends AppCompatActivity
 
     private void startAlarm(){
 
-        Log.wtf(TAG, "START ALARM");
-
-
         if(isChallengeDone) return;
-
-        Log.wtf(TAG, "START ALARM AFTER CHALLENGE DONE");
-
-        Log.d(TAG, "starting");
-
         btnSpeak.clearAnimation();
         btnSpeak.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_bg_round));
-
-
-        Log.wtf(TAG, "RING " + alarm.getRingtone().toString());
-
-
-
         ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarm.getRingtone());
         ringtone.setStreamType(AudioManager.STREAM_ALARM);
         ringtone.play();
@@ -255,6 +228,12 @@ public class AlarmActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        stopAlarm();
+        asyncTaskHighlighter.cancel(true);
+        super.onDestroy();
+    }
 
     @Override
     protected void onPause() {

@@ -1,34 +1,25 @@
-package com.github.sohe1l.inspiremealarmclock.ui;
+package com.github.sohe1l.inspiremealarmclock.ui.create;
 
 import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.github.sohe1l.inspiremealarmclock.R;
@@ -38,17 +29,16 @@ import com.github.sohe1l.inspiremealarmclock.ui.alarm.AlarmActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CreateAlarmActivity extends AppCompatActivity {
 
-    private static final String TAG = CreateAlarmActivity.class.toString();
+    private static final String TAG = "CreateAlarmActivity";
     private static final int REQUEST_RINGTONE = 100;
 
-    Alarm alarm; // if its null means we are creating a new alarm otherwise we are editing
+    private Alarm alarm; // if its null means we are creating a new alarm otherwise we are editing
 
     @BindView(R.id.tp_time)
     TimePicker timePicker;
@@ -89,8 +79,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
     @BindView(R.id.sw_vibrate)
     Switch swVibrate;
 
-    Uri ringtoneUri;
-    Ringtone ringtone;
+    private Uri ringtoneUri;
 
     private AppDatabase mDb;
 
@@ -138,7 +127,10 @@ public class CreateAlarmActivity extends AppCompatActivity {
         Intent creatingIntent = getIntent();
         if(creatingIntent.hasExtra(Alarm.INTENT_KEY)){ // editing alarm
             alarm = creatingIntent.getParcelableExtra(Alarm.INTENT_KEY);
+            setTitle(R.string.title_activity_edit_alarm);
             populateForm();
+        }else{
+            setTitle(R.string.title_activity_create_alarm);
         }
 
         mDb = AppDatabase.getInstance(getApplicationContext());
@@ -181,11 +173,21 @@ public class CreateAlarmActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == R.id.action_try_alarm){
+
+            // not all info is needed to test alarm
+            Alarm testAlarm = new Alarm(true, "", 0, 0,
+                    ringtoneUri, swVibrate.isChecked(), null, false);
+
             Intent alarmIntent = new Intent(this, AlarmActivity.class);
-            alarmIntent.putExtra(Alarm.INTENT_KEY, alarm);
+            alarmIntent.putExtra(Alarm.INTENT_KEY, testAlarm);
+            alarmIntent.putExtra(Alarm.INTENT_KEY_TESTING, true);
             startActivity(alarmIntent);
+
+
         }else if(id == R.id.action_delete_alarm){
-            mDb.alarmDao().delete(alarm);
+            if(alarm != null){ // has not created yet
+                mDb.alarmDao().delete(alarm);
+            }
             finish();
         }
 
@@ -222,7 +224,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
     private ArrayList<Integer> getRepeat(){
         if(!swRepeat.isChecked()) return null;
 
-        ArrayList<Integer> repeatList = new ArrayList<Integer>();
+        ArrayList<Integer> repeatList = new ArrayList<>();
 
         if(btnMonday.isChecked()){
             repeatList.add(Calendar.MONDAY);
@@ -274,7 +276,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
     private void selectRingtone(Uri uri){
         if(uri != null){
             ringtoneUri = uri;
-            ringtone = RingtoneManager.getRingtone(this, ringtoneUri);
+            Ringtone ringtone = RingtoneManager.getRingtone(this, ringtoneUri);
             tvRingtone.setText(ringtone.getTitle(this));
         } else {
             ringtoneUri = null;

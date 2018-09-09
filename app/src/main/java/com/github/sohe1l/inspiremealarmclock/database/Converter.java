@@ -2,15 +2,8 @@ package com.github.sohe1l.inspiremealarmclock.database;
 
 import android.arch.persistence.room.TypeConverter;
 import android.net.Uri;
-import android.util.Log;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Converter {
 
@@ -18,7 +11,7 @@ public class Converter {
     public static ArrayList<Integer> stringToIntegerArrayList(String days){
         if(days == null || days.equals("")) return null;
 
-        ArrayList<Integer> res = new ArrayList<Integer>();
+        ArrayList<Integer> res = new ArrayList<>();
         String[] daysStringArray = days.split(",");
         for (String day : daysStringArray) {
             res.add(Integer.valueOf(day));

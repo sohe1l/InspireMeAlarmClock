@@ -5,10 +5,5 @@
 
     <TextView
         android:id="@+id/widget_list_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        android:textColor="#ffffff"
-        android:textSize="28sp"
-        android:lineSpacingMultiplier="1.5"/>
+        style="@style/widget_text_style"/>
 </FrameLayout>

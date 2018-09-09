@@ -1,6 +1,5 @@
 package com.github.sohe1l.inspiremealarmclock.ui.dashboard;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,7 +13,6 @@ import com.github.sohe1l.inspiremealarmclock.ui.RecyclerItemClickListener;
 import com.github.sohe1l.inspiremealarmclock.ui.SwitchClickListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import butterknife.BindView;
@@ -37,7 +35,7 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnC
     @BindView(R.id.sw_active)
     Switch swActive;
 
-    private String[] days;
+    private final String[] days;
 
     public AlarmViewHolder(@NonNull View itemView, RecyclerItemClickListener clickListener, SwitchClickListener switchListener) {
         super(itemView);
@@ -70,6 +68,8 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnC
                 alarmRepeat.append(days[day] + " ");
 
             }
+        }else{
+            alarmRepeat.setVisibility(View.GONE);
         }
 
         swActive.setChecked(alarm.isActive());

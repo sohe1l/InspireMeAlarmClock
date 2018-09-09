@@ -20,9 +20,7 @@ import retrofit2.Response;
 
 public class QuotesJobService extends JobService {
 
-    public static final String TAG = QuotesJobService.class.getSimpleName();
-
-
+    private static final String TAG = QuotesJobService.class.getSimpleName();
 
     @Override
     public boolean onStartJob(final JobParameters job) {

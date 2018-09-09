@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "154522370884",
+    "firebase_url": "https://inspire-me-alarm.firebaseio.com",
+    "project_id": "inspire-me-alarm",
+    "storage_bucket": "inspire-me-alarm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154522370884:android:a7bcc2ba7b2aa523",
+        "android_client_info": {
+          "package_name": "com.github.sohe1l.inspiremealarmclock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154522370884-lkics0ro6ir46pbv114ncn0fq63a223m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.sohe1l.inspiremealarmclock",
+            "certificate_hash": "e22c13756deb17a2886a6ebf9b52d33ba3a6fc6b"
+          }
+        },
+        {
+          "client_id": "154522370884-p7d9t64lob2oobmvg62adt9igjcbbvdg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4tHFJqfj7oWoGPR_Dk2hkKDZ5DmUvyec"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "154522370884-p7d9t64lob2oobmvg62adt9igjcbbvdg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

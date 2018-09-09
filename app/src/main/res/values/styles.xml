@@ -13,10 +13,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
 
     <!-- ToolBar -->
     <style name="ToolbarStyle">
@@ -36,7 +32,60 @@
     </style>
 
 
+    <style name="alarm_action_btn">
+        <item name="android:layout_width">@dimen/alarm_action_btn_size</item>
+        <item name="android:layout_height">@dimen/alarm_action_btn_size</item>
+        <item name="android:layout_weight">0</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
 
+    <style name="alarm_quote_text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:textSize">32sp</item>
+    </style>
 
+    <style name="create_alarm_tv">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
 
+    <style name="switch_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
+    <style name="no_alarm_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">64dp</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
+    <style name="no_alarm_sub_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
+    <style name="widget_text_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
 </resources>

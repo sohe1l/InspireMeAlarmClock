@@ -11,13 +11,11 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;
 import com.github.sohe1l.inspiremealarmclock.database.Converter;
 import com.github.sohe1l.inspiremealarmclock.receiver.AlarmReceiver;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -27,18 +25,21 @@ public class Alarm implements Parcelable{
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-    boolean active;
-    String label;
-    int hour; // always will be in 24hour format
-    int minute;
-    Uri ringtone;
-    boolean vibrate;
-    ArrayList<Integer> repeat;  // based on Calendar.MONDAY, ...
-    boolean challengeDone; // if its true means the user has solved the challenge and alarm is off
-
+    private boolean active;
+    private String label;
+    private int hour; // always will be in 24hour format
+    private int minute;
+    private Uri ringtone;
+    private boolean vibrate;
+    private ArrayList<Integer> repeat;  // based on Calendar.MONDAY, ...
+    private boolean challengeDone; // if its true means the user has solved the challenge and alarm is off
 
     @Ignore
     public static final String INTENT_KEY = "ALARM_INTENT_KEY";
+
+    @Ignore
+    public static final String INTENT_KEY_TESTING = "ALARM_INTENT_TEST_KEY";
+
 
     public Alarm(int id, boolean active, String label, int hour, int minute, Uri ringtone, boolean vibrate, ArrayList<Integer> repeat, boolean challengeDone) {
         this.id = id;
@@ -198,11 +199,11 @@ public class Alarm implements Parcelable{
     }
 
 
-    public int getAsMilliseconds(){
+    private int getAsMilliseconds(){
         return hour*60*60*1000 + minute*60*1000;
     }
 
-    public int getNextOccurrence(){
+    private int getNextOccurrence(){
 
         Calendar calendar = Calendar.getInstance();
         final int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
@@ -240,7 +241,7 @@ public class Alarm implements Parcelable{
         return mills;
     }
 
-    public int getNextMillsForNonRepeating(){
+    private int getNextMillsForNonRepeating(){
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
@@ -255,7 +256,7 @@ public class Alarm implements Parcelable{
         return mills;
     }
 
-    public int getMillsForRepeating(int repeatDay){
+    private int getMillsForRepeating(int repeatDay){
 
         final int oneDayInMills = 24*60*60*1000;
         Calendar calendar = Calendar.getInstance();
@@ -311,8 +312,7 @@ public class Alarm implements Parcelable{
                 SystemClock.elapsedRealtime() + afterMills,
                 pendingIntent);
     }
-
-
+    
     public static void setALlAlarms(Context context){
         AppDatabase mDb = AppDatabase.getInstance(context);
         List<Alarm> activeAlarms = mDb.alarmDao().getActiveAlarmsAsList();
@@ -324,7 +324,4 @@ public class Alarm implements Parcelable{
         }
 
     }
-
-
-
 }

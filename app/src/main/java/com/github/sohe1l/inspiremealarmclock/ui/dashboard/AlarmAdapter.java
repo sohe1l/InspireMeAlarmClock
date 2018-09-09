@@ -13,7 +13,7 @@ import com.github.sohe1l.inspiremealarmclock.ui.SwitchClickListener;
 
 import java.util.List;
 
-public class AlarmAdapter extends RecyclerView.Adapter<AlarmViewHolder>  {
+class AlarmAdapter extends RecyclerView.Adapter<AlarmViewHolder>  {
 
     final private List<Alarm> alarms;
     final private RecyclerItemClickListener recyclerClickListener;

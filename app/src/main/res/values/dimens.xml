@@ -1,9 +1,4 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
-
-    <!--
-Refer to App Widget Documentation for margin information
-http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
-    -->
-    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="alarm_action_btn_size">60dp</dimen>
+    <dimen name="time_picker_height">150dp</dimen>
 </resources>

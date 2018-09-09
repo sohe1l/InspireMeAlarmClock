@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
+    android:padding="16dp"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <TextView
+            android:id="@+id/alarm_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textSize="30sp"
+            tools:ignore="RelativeOverlap" />
 
-
-    <TextView
-        android:id="@+id/alarm_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="26sp"/>
+        <Switch
+            android:id="@+id/sw_active"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            style="@style/switch_style"/>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/alarm_title"
@@ -25,20 +35,5 @@
         android:id="@+id/alarm_repeat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
-    <Switch
-        android:id="@+id/sw_active"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_weight="0"
-        android:checked="true"
-        android:text="Active" />
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
 
 </LinearLayout>

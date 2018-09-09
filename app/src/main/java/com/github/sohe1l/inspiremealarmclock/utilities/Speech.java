@@ -12,8 +12,8 @@ public class Speech implements RecognitionListener {
 
     private static final String TAG = "Speech Class";
     private SpeechRecognizer speech = null;
-    private Context context;
-    private SpeechCallback speechCallback;
+    private final Context context;
+    private final SpeechCallback speechCallback;
 
     public Speech(Context context, SpeechCallback speechCallback){
         this.context = context;

@@ -1,4 +1,4 @@
-package com.github.sohe1l.inspiremealarmclock;
+package com.github.sohe1l.inspiremealarmclock.ui.widget;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import com.github.sohe1l.inspiremealarmclock.R;
 import com.github.sohe1l.inspiremealarmclock.ui.widget.ListViewWidgetService;
 
 /**
@@ -13,8 +14,8 @@ import com.github.sohe1l.inspiremealarmclock.ui.widget.ListViewWidgetService;
  */
 public class TodayQuoteWidget extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                        int appWidgetId) {
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.today_quote_widget);

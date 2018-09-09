@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,12 +8,13 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/ToolbarStyle"
-        android:elevation="4dp" />
+        android:elevation="4dp"
+        tools:ignore="UnusedAttribute" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="?android:attr/actionBarSize">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,24 +24,24 @@
             <TimePicker
                 android:id="@+id/tp_time"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:timePickerMode="spinner" />
+                android:layout_height="@dimen/time_picker_height"
+                android:timePickerMode="spinner"
+                tools:ignore="UnusedAttribute" />
 
             <EditText
                 android:id="@+id/txt_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:hint="Alarm Name" />
+                android:hint="@string/alarm_name"
+                android:inputType="text" />
 
             <Switch
                 android:id="@+id/sw_repeat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:text="@string/repeat"
                 android:layout_weight="0"
                 android:checked="true"
-                android:text="Repeat" />
+                style="@style/switch_style"/>
 
             <LinearLayout
                 android:id="@+id/layDays"
@@ -53,50 +54,50 @@
                     android:id="@+id/btn_monday"
                     style="@style/dayToggleBtn"
                     android:checked="true"
-                    android:textOff="MON"
-                    android:textOn="MON" />
+                    android:textOff="@string/mon"
+                    android:textOn="@string/mon" />
 
                 <ToggleButton
                     android:id="@+id/btn_tuesday"
                     style="@style/dayToggleBtn"
                     android:checked="true"
-                    android:textOff="TUE"
-                    android:textOn="TUE" />
+                    android:textOff="@string/tue"
+                    android:textOn="@string/tue" />
 
                 <ToggleButton
                     android:id="@+id/btn_wednesday"
                     style="@style/dayToggleBtn"
                     android:checked="true"
-                    android:textOff="WED"
-                    android:textOn="WED" />
+                    android:textOff="@string/wed"
+                    android:textOn="@string/wed" />
 
                 <ToggleButton
                     android:id="@+id/btn_thursday"
                     style="@style/dayToggleBtn"
                     android:checked="true"
-                    android:textOff="THU"
-                    android:textOn="THU" />
+                    android:textOff="@string/thu"
+                    android:textOn="@string/thu" />
 
                 <ToggleButton
                     android:id="@+id/btn_friday"
                     style="@style/dayToggleBtn"
                     android:checked="true"
-                    android:textOff="FRI"
-                    android:textOn="FRI" />
+                    android:textOff="@string/fri"
+                    android:textOn="@string/fri" />
 
                 <ToggleButton
                     android:id="@+id/btn_saturday"
                     style="@style/dayToggleBtn"
                     android:checked="true"
-                    android:textOff="SAT"
-                    android:textOn="SAT" />
+                    android:textOff="@string/sat"
+                    android:textOn="@string/sat" />
 
                 <ToggleButton
                     android:id="@+id/btn_sunday"
                     style="@style/dayToggleBtn"
                     android:checked="true"
-                    android:textOff="SUN"
-                    android:textOn="SUN" />
+                    android:textOff="@string/sun"
+                    android:textOn="@string/sun" />
 
             </LinearLayout>
 
@@ -104,22 +105,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
                 android:gravity="center_vertical">
 
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="0"
-                    android:text="Tone:" />
+                    android:text="@string/tone"
+                    style="@style/create_alarm_tv"
+                    android:layout_weight="0"/>
 
                 <TextView
                     android:id="@+id/tv_ringtone"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    style="@style/create_alarm_tv"
                     android:layout_weight="1"
                     android:onClick="selectRingtone" />
 
@@ -128,11 +124,9 @@
 
             <Switch
                 android:id="@+id/sw_vibrate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
                 android:checked="true"
-                android:text="Vibrate" />
+                android:text="@string/vibrate"
+                style="@style/switch_style"/>
 
         </LinearLayout>
     </ScrollView>
@@ -145,5 +139,5 @@
         app:useCompatPadding="true"
         app:srcCompat="@drawable/ic_check_white_24dp" />
 
-</FrameLayout>
+</merge>
 

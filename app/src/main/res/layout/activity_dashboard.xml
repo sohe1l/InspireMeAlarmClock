@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,16 +8,17 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/ToolbarStyle"
-        android:elevation="4dp" />
+        android:elevation="4dp"
+        tools:ignore="UnusedAttribute" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="?android:attr/actionBarSize">
 
         <fragment
             android:id="@+id/fragment"
-            android:name="com.github.sohe1l.inspiremealarmclock.DashboardActivityFragment"
+            android:name="com.github.sohe1l.inspiremealarmclock.ui.dashboard.DashboardActivityFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:layout="@layout/fragment_dashboard" />
@@ -33,4 +34,4 @@
         app:useCompatPadding="true"
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
-</FrameLayout>
+</merge>

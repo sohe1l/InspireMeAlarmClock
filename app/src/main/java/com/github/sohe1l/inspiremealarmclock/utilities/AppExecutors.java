@@ -1,4 +1,4 @@
-package com.github.sohe1l.inspiremealarmclock;
+package com.github.sohe1l.inspiremealarmclock.utilities;
 
 import android.os.Handler;
 import android.os.Looper;

@@ -1,4 +1,4 @@
-package com.github.sohe1l.inspiremealarmclock;
+package com.github.sohe1l.inspiremealarmclock.ui.dashboard;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -11,11 +11,11 @@ import com.github.sohe1l.inspiremealarmclock.model.Alarm;
 
 import java.util.List;
 
-public class DashboardViewModel extends AndroidViewModel {
+class DashboardViewModel extends AndroidViewModel {
 
     private static final String TAG = DashboardViewModel.class.getSimpleName();
 
-    private LiveData<List<Alarm>> alarms;
+    private final LiveData<List<Alarm>> alarms;
 
     public DashboardViewModel(@NonNull Application application) {
         super(application);

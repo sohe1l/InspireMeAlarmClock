@@ -1,11 +1,8 @@
 package com.github.sohe1l.inspiremealarmclock.receiver;
 
-import android.app.job.JobScheduler;
-import android.app.job.JobService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.util.Log;
 
 import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;

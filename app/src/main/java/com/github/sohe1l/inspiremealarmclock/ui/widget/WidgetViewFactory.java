@@ -1,21 +1,17 @@
 package com.github.sohe1l.inspiremealarmclock.ui.widget;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.github.sohe1l.inspiremealarmclock.R;
 import com.github.sohe1l.inspiremealarmclock.model.Quote;
 
-public class WidgetViewFactory  implements RemoteViewsService.RemoteViewsFactory {
+class WidgetViewFactory  implements RemoteViewsService.RemoteViewsFactory {
 
 
-    private Context context;
+    private final Context context;
     private String quoteText;
     private int count = 0;
 
