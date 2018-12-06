@@ -9,8 +9,7 @@
     <string name="alarm_silent">Silent</string>
     <string name="try_alarm">Try Alarm</string>
 
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-6626686421064912/7295326198</string>
 
     <string name="share_title">Share Today\'s Quote</string>
     <string name="share_text">%s #InspireMeAlarm</string>

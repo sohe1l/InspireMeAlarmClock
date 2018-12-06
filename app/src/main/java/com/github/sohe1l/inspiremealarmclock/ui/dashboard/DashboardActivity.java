@@ -34,10 +34,6 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(createAlarmIntent);
             }
         });
-
-        Context context = getApplicationContext();
-
-        Alarm.setALlAlarms(context);
     }
 
     @Override

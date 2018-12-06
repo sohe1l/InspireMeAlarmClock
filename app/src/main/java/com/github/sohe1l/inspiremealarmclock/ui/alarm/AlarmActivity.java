@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.sohe1l.inspiremealarmclock.R;
@@ -69,6 +70,9 @@ public class AlarmActivity extends AppCompatActivity
     @BindView(R.id.btn_share)
     ImageButton btnShare;
 
+    @BindView(R.id.alarm_view)
+    LinearLayout alarmView;
+
     private Ringtone ringtone;
     private Vibrator vibrator;
     private Animation speakBtnAnim;
@@ -77,6 +81,8 @@ public class AlarmActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.wtf("AlarmActivity", "On create");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
 
@@ -110,9 +116,6 @@ public class AlarmActivity extends AppCompatActivity
 
         tvQuote.setText(quote.getQuote());
 
-        Log.wtf("WORDS", "@@@@@@@@@@@@@@@@@@@@@@ CREATING NEW HIGHLIGHTER");
-
-
         textHighlighter = new TextHighlighter(tvQuote, quote.getQuote(), getResources().getColor(R.color.highlightedQuote), this);
         asyncTaskHighlighter = textHighlighter.execute();
 
@@ -137,7 +140,9 @@ public class AlarmActivity extends AppCompatActivity
         btnSpeak.setVisibility(View.GONE);
         btnShare.setVisibility(View.VISIBLE);
 
-        tvQuote.setTextColor(getResources().getColor(R.color.highlightedQuote));
+        tvQuote.setText(quote.getQuote());
+        tvQuote.setTextColor(getResources().getColor(R.color.colorWhite));
+        alarmView.setBackgroundColor(getResources().getColor(R.color.highlightedQuote));
 
         // Log event
         Bundle bundle = new Bundle();
@@ -199,11 +204,16 @@ public class AlarmActivity extends AppCompatActivity
     private void startAlarm(){
 
         if(isChallengeDone) return;
+        Log.wtf("GGGG", "Cleared animation");
+
         btnSpeak.clearAnimation();
         btnSpeak.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_bg_round));
-        ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarm.getRingtone());
-        ringtone.setStreamType(AudioManager.STREAM_ALARM);
-        ringtone.play();
+
+        if(ringtone == null || !ringtone.isPlaying()){
+            ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarm.getRingtone());
+            ringtone.setStreamType(AudioManager.STREAM_ALARM);
+            ringtone.play();
+        }
 
         if(alarm.isVibrate()){
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -230,6 +240,7 @@ public class AlarmActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
+        Log.wtf("AlarmActivity", "On Destroy");
         stopAlarm();
         asyncTaskHighlighter.cancel(true);
         super.onDestroy();
@@ -237,9 +248,19 @@ public class AlarmActivity extends AppCompatActivity
 
     @Override
     protected void onPause() {
+        //Log.wtf("AlarmActivity", "On pause");
         speech.cleanUpSpeech();
         super.onPause();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Log.wtf("AlarmActivity", "On resume");
+        stopAlarm();
+        startAlarm();
+    }
+
 
     public void processResultBundle(Bundle results) {
         try {

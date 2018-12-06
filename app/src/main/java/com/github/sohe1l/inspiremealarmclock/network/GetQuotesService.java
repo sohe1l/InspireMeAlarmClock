@@ -6,10 +6,14 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 
 public interface GetQuotesService {
 
-    @GET("quotes")
+    @GET("quote")
+    Call<Quote> getQuote();
+
+    @GET("quote")
     Call<List<Quote>> getQuotes();
 
 }

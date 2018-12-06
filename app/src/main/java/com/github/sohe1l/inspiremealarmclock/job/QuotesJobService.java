@@ -9,6 +9,8 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
+import com.firebase.jobdispatcher.RetryStrategy;
+import com.firebase.jobdispatcher.Trigger;
 import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;
 import com.github.sohe1l.inspiremealarmclock.model.Quote;
 import com.github.sohe1l.inspiremealarmclock.network.GetQuotesService;
@@ -24,10 +26,6 @@ public class QuotesJobService extends JobService {
 
     @Override
     public boolean onStartJob(final JobParameters job) {
-
-        Log.d(TAG, "onStartJob");
-
-
         // Do some work here
         GetQuotesService service = RetrofitClientInstance.getRetrofitInstance().create(GetQuotesService.class);
         Call<List<Quote>> call = service.getQuotes();
@@ -35,8 +33,8 @@ public class QuotesJobService extends JobService {
         call.enqueue(new Callback<List<Quote>>() {
             @Override
             public void onResponse(Call<List<Quote>> call, Response<List<Quote>> response) {
-                if (response.isSuccessful()) {
 
+                if (response.isSuccessful()) {
                     AppDatabase mDB = AppDatabase.getInstance(getApplicationContext());
 
                     List<Quote> quotesList = response.body();
@@ -44,10 +42,8 @@ public class QuotesJobService extends JobService {
                         Quote quote = new Quote(q.getQuote(), q.getAuthor(), q.getCategory());
                         mDB.quoteDao().insert(quote);
                     }
-                    Log.d(TAG, "Job finished with success! ");
                     jobFinished(job, false);
                 }else{
-                    Log.d(TAG, "Job finished with error ");
                     jobFinished(job, true);
                 }
             }
@@ -65,18 +61,20 @@ public class QuotesJobService extends JobService {
     @Override
     public boolean onStopJob(JobParameters job) {
         // since we did not called jobFinished therefore the job should be rescheduled
-        Log.d(TAG, "onStopJob");
-
         return true;
     }
 
 
     public static void scheduleQuoteJob(Context context){
+
         // set job for updating quotes
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
         Job quotesJob = dispatcher.newJobBuilder()
                 .setService(QuotesJobService.class)
                 .setTag(Quote.JOB_TAG)
+                //.setReplaceCurrent(true)
+                //.setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
+                //.setTrigger(Trigger.executionWindow(0, 5))
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .build();
 

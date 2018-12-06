@@ -39,9 +39,6 @@ class TextHighlighter extends AsyncTask<Void, Spannable, Void> {
         textLC = s.toLowerCase();
         this.callback = callback;
         this.highlightColor = highlightColor;
-
-        Log.wtf(TAG, "@@@@ END OF CONST ");
-
     }
 
     public void checkWords(String words){
@@ -53,7 +50,6 @@ class TextHighlighter extends AsyncTask<Void, Spannable, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        Log.wtf("WORDS", "@@@@@@@@@@@@@@@@@@@@@@ DONE @@@@@@@");
         callback.onHighlightingDone();
         super.onPostExecute(aVoid);
     }
@@ -61,16 +57,12 @@ class TextHighlighter extends AsyncTask<Void, Spannable, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
 
-        Log.wtf("WORDS", "@@@@@@@@@@@@@@@@@@@@@@ INSIDE DO IN BACKGROUND");
-
         while(true){
-            Log.wtf("WORDS", "@@@@@@@@@@@@@@@@@@@@@@ INSIDE W1");
 
             while(wordsToCheck.isEmpty()){
                 if (isCancelled()) break;
 
                 try {
-                    Log.wtf("WORDS", "@@@@@@@@@@@@@@@@@@@@@@ INSIDE W2");
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -79,13 +71,8 @@ class TextHighlighter extends AsyncTask<Void, Spannable, Void> {
             String s = wordsToCheck.poll().toLowerCase();
 
 
-            Log.wtf("WORDS", "@@@@@@@@@@@ CHECKED COUNT: " + wordsChecked.size());
-
-
             // make sure to check each word only once
             if(wordsChecked.contains(s)){
-                Log.wtf("WORDS", "@@@@@@@@@@@@@@@@@@@@@@ ALREADY CHECKED: " + s);
-
                 continue;
             }else{
                 wordsChecked.add(s);
@@ -93,12 +80,10 @@ class TextHighlighter extends AsyncTask<Void, Spannable, Void> {
 
             int index = textLC.indexOf(s);
             while(index != -1){
-                Log.wtf("WORDS", "@@@@@@@@@@@@@@@@@@@@@@ WHILE @@@@@@@");
                 for(int j = index; j<=index+s.length(); j++){
                     lettersSaid.add(j);
                 }
                 spannable.setSpan(new ForegroundColorSpan(highlightColor), index, index+s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                Log.wtf("WORDS", "@@@@@@@@@@@@@@@@@@@@@@ PUBLISHING @@@@@@@");
                 publishProgress(spannable);
                 int start = index+s.length() ;
                 index = textLC.indexOf(s, start);
@@ -113,7 +98,6 @@ class TextHighlighter extends AsyncTask<Void, Spannable, Void> {
 
     @Override
     protected void onProgressUpdate(Spannable... values) {
-        Log.wtf("WORDS", "@@@@@@@@@@@@@@@@@@@@@@ UPDATING @@@@@@@");
         super.onProgressUpdate(values);
         textView.get().setText(values[0]);
     }

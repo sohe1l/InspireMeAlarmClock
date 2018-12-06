@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
+import android.util.Log;
 
 import com.github.sohe1l.inspiremealarmclock.R;
 import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;
@@ -20,7 +21,10 @@ public class Quote {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+
     private String quote;
+
+
     private String author;
     private String category;
 
@@ -73,8 +77,6 @@ public class Quote {
 
 
 
-
-
     @SuppressLint("DefaultLocale") // used for logs only
     @Override
     public String toString() {
@@ -82,15 +84,17 @@ public class Quote {
     }
 
 
-
     public static Quote getRandomQuote(Context context){
         Quote quote;
         AppDatabase mDB = AppDatabase.getInstance(context);
         int count = mDB.quoteDao().getNumberOfQuotes();
-        if(count == 0){
+
+        if(count < 5){
             // the database is empty, load new quotes
             QuotesJobService.scheduleQuoteJob(context);
+        }
 
+        if(count == 0){
             // use the default quote
             quote = new Quote(
                     context.getString(R.string.default_quote),

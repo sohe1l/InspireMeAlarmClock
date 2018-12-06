@@ -33,6 +33,7 @@
                 android:value="com.github.sohe1l.inspiremealarmclock.ui.dashboard.DashboardActivity" />
         </activity>
         <activity android:name=".ui.alarm.AlarmActivity"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <receiver

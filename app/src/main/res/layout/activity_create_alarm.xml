@@ -116,6 +116,7 @@
                 <TextView
                     android:id="@+id/tv_ringtone"
                     style="@style/create_alarm_tv"
+                    android:layout_height="40sp"
                     android:layout_weight="1"
                     android:onClick="selectRingtone" />
 

@@ -38,12 +38,14 @@ public class Converter {
 
     @TypeConverter
     public static String uriToString(Uri uri){
+        if(uri == null) return "";
         return uri.toString();
     }
 
 
     @TypeConverter
     public static Uri stringToUri(String uriString){
+        if(uriString.equals("")) return null;
         return Uri.parse(uriString);
     }
 

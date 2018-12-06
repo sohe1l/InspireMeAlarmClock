@@ -8,13 +8,17 @@ import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.github.sohe1l.inspiremealarmclock.database.AppDatabase;
 import com.github.sohe1l.inspiremealarmclock.database.Converter;
 import com.github.sohe1l.inspiremealarmclock.receiver.AlarmReceiver;
+import com.github.sohe1l.inspiremealarmclock.utilities.ParcelableUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -303,24 +307,53 @@ public class Alarm implements Parcelable{
 
     public void scheduleAlarm(int afterMills, Context context){
 
+        if(!active) return;
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent alarmReceiverIntent = new Intent(context, AlarmReceiver.class);
-        alarmReceiverIntent.putExtra(Alarm.INTENT_KEY, this);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, getId(), alarmReceiverIntent, 0);
+        //alarmReceiverIntent.putExtra(Alarm.INTENT_KEY, this);
 
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + afterMills,
-                pendingIntent);
+        byte[] bytes = ParcelableUtil.marshall(this);
+        alarmReceiverIntent.putExtra(Alarm.INTENT_KEY, bytes);
+
+
+        int flag = 0;
+//        if(!active){
+//            flag = PendingIntent.FLAG_CANCEL_CURRENT;
+//        }
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, getId(), alarmReceiverIntent, flag);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + afterMills,
+                    pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + afterMills,
+                    pendingIntent);
+        }
+
+
+//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//                SystemClock.elapsedRealtime() + afterMills,
+//                pendingIntent);
     }
-    
+
     public static void setALlAlarms(Context context){
+
+        Log.wtf("AL", "Scheduling alarms");
+
+        // here we must not update the alarms otherwise will create infinite loop
+
         AppDatabase mDb = AppDatabase.getInstance(context);
         List<Alarm> activeAlarms = mDb.alarmDao().getActiveAlarmsAsList();
         for (Alarm alarm : activeAlarms) {
             alarm.scheduleAlarmNextOccurrence(context);
             // set challenge done to false to make sure user has to do the challenge
-            alarm.setChallengeDone(false);
-            mDb.alarmDao().update(alarm);
+//            alarm.setChallengeDone(false);
+//            mDb.alarmDao().update(alarm);
         }
 
     }

@@ -103,6 +103,8 @@ public class Speech implements RecognitionListener {
         if (speech != null) {
             speech.cancel();
         }
+
+        speechCallback.endOfSpeech();
     }
 
     @Override

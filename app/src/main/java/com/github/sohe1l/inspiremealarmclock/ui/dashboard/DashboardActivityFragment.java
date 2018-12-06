@@ -61,29 +61,11 @@ public class DashboardActivityFragment extends Fragment
             public void onChanged(@Nullable List<Alarm> newAlarms) {
                 alarms = newAlarms;
                 loadAlarms();
+                Alarm.setALlAlarms(getContext());
             }
         });
 
         loadAlarms();
-//
-//        ItemTouchHelper.SimpleCallback itemTouchHelper = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-//            @Override
-//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
-//
-//                return false;
-//            }
-//
-//            @Override
-//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-//                Toast.makeText(getContext(), "on Move", Toast.LENGTH_SHORT).show();
-//
-//            }
-//        };
-//
-//        new ItemTouchHelper(itemTouchHelper).attachToRecyclerView(rvAlarms);
-//
-//
-
 
         return view;
     }
@@ -129,8 +111,5 @@ public class DashboardActivityFragment extends Fragment
         Alarm alarm = mDb.alarmDao().getAlarm(id);
         alarm.setActive(isOn);
         mDb.alarmDao().update(alarm);
-
-        // set up the alarms again
-        Alarm.setALlAlarms(getContext());
     }
 }

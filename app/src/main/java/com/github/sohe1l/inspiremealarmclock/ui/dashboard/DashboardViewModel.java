@@ -11,7 +11,7 @@ import com.github.sohe1l.inspiremealarmclock.model.Alarm;
 
 import java.util.List;
 
-class DashboardViewModel extends AndroidViewModel {
+public class DashboardViewModel extends AndroidViewModel {
 
     private static final String TAG = DashboardViewModel.class.getSimpleName();
 
