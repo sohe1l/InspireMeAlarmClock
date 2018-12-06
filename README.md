@@ -3,10 +3,11 @@
 
 Android alarm clock application which will present the user with an inspirational quote which the user has to read out loud to turn off the alarm!
 
-
-<img src="graphics/sc_dashboard.jpg" width="100">
-<img src="graphics/sc_dashboard.jpg" width="100">
-<img src="graphics/sc_dashboard.jpg" width="100">
+<div style="overflow: auto;">
+  <img src="graphics/sc_dashboard.jpg" width="175" style="float:left">
+  <img src="graphics/sc_create_alarm.jpg" width="175" style="float:left">
+  <img src="graphics/sc_alarm.jpg" width="175" style="float:left">
+</div>
 
 <!-- 
 
