@@ -16,14 +16,15 @@ Android alarm clock application which will present the user with an inspirationa
 ![Dashboard](graphics/sc_dashboard.jpg | width=100) ![New Alarm](graphics/sc_dashboard.jpg | width=100) ![Alarm](graphics/sc_dashboard.jpg | width=100) -->
 
 
-The most intresting part of the project is setting the broadcast reciver to capture the alarm. Therfore, even if the use close the alarm activity, still it will schedule another activity to check if the alarm is turned off using the challenge.
+The most interesting part of the project is setting the broadcast receiver to capture the alarm. Therefore, even if the user close the alarm activity, still it will schedule another activity to check if the alarm is turned off using the challenge.
 
 ## Download
 
-Download the app on google play store:
+Download the app on Google play store:
+
 https://play.google.com/store/apps/details?id=com.github.sohe1l.inspiremealarmclock
 
-I will appriciate any feedback.
+I will appreciate any feedback.
 
 
 ## Dependencies
